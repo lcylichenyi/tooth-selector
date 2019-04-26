@@ -1,22 +1,22 @@
 <template>
   <div ref="sel" class="container">
     <div class="header">
-      <input type="button" value="清空" />
-      <input type="button" value="全口" class="active" />
-      <input type="button" value="上半口" class="active" />
-      <input type="button" value="下半口" class="active" />
+      <input type="button" value="清空" @click="clear" />
+      <input type="button" value="全口" :class="{'active': allTeeth}" @click="allTeethChosen" />
+      <input type="button" value="上半口" :class="{'active': topHalfTeeth}" @click="topHalfTeethChosen" />
+      <input type="button" value="下半口" :class="{'active': bottomHalfTeeth}" @click="bottomHalfTeethChosen" />
     </div>
     <div class="body-left">
       <div class="body-left-1 clearfix">
         <div class="clearfix" id="body-left-1-line-1">
-          <div class="fl interval" v-for="i in 7" :key="i + 'a1'">
-            <input type="button" class="box" :value="9 - i + '|' + (8 - i)" />
+          <div class="fl interval" v-for="i in top_left_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+            <input type="button" class="box" :value="i.name" :id="i.id" />
           </div>
-          <div class="fl interval">
-            <input type="button" class="box" value="1|1" id="interval-middle" />
+          <div class="fl interval" @click="choose($event,61)" :class="{'orange': teethInfo[60]['chosen'] === true}">
+            <input type="button" class="box interval-middle" :value="top_center[0].name" :id="top_center[0].id" />
           </div>
-          <div class="fl interval" v-for="i in 7" :key="i + 'b1'">
-            <input type="button" class="box" :value="i + '|' + (1 + i)" />
+          <div class="fl interval" v-for="i in top_right_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id-1]['chosen'] === true}">
+            <input type="button" class="box" :value="i.name" :id="i.id" />
           </div>
           <br />
           <br />
@@ -24,37 +24,37 @@
 
         </div>
         <div class="clearfix" id="body-left-1-line-2">
-          <div class="fl tooth orange" v-for="i in 8" :key="i + 'a2'">
-            <input type="button" class="box" :value="9 - i" />
+          <div class="fl tooth" v-for="i in top_left_2" :key="i.id"  @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+            <input type="button" class="box" :value="i.name" :id="i.id" />
           </div>
           <div class="y-line"></div>
-          <div class="fl tooth" v-for="i in 8" :key="i + 'b2'">
-            <input type="button" class="box" :value="i" />          
+          <div class="fl tooth" v-for="i in top_right_2" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+            <input type="button" class="box" :value="i.name" :id="i.id" />
           </div>
         </div>
       </div>
       <div class="line"></div>
       <div class="body-left-2 clearfix">
         <div class="clearfix" id="body-left-2-line-1">
-          <div class="fl tooth" v-for="i in 8" :key="i + 'c1'">
-            <input type="button" class="box" :value="9 - i" />
+          <div class="fl tooth" v-for="i in bottom_left_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+            <input type="button" class="box" :value="i.name" :id="i.id" />
           </div>
           <div class="y-line"></div>
-          <div class="fl tooth" v-for="i in 8" :key="i + 'd1'">
-            <input type="button" class="box" :value="i" />
+          <div class="fl tooth" v-for="i in bottom_right_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+            <input type="button" class="box" :value="i.name" :id="i.id" />
           </div>
           <br />
           <br />
         </div>
         <div class="clearfix" id="body-left-2-line-2">
-          <div class="fl interval orange" v-for="i in 7" :key="i + 'c2'">
-            <input type="button" class="box" :value="9 - i + '|' + (8 - i)" />
+          <div class="fl interval" v-for="i in bottom_left_2" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+            <input type="button" class="box" :value="i.name" :id="i.id" />
           </div>
-          <div class="fl interval">
-            <input type="button" class="box" value="1|1" id="interval-middle" />
+          <div class="fl interval" @click="choose($event,62)" :class="{'orange': teethInfo[61]['chosen'] === true}">
+            <input type="button" class="box interval-middle" :value="bottom_center[0].name" :id="bottom_center[0].id" />
           </div>
-          <div class="fl interval" v-for="i in 7" :key="i + 'd2'">
-            <input type="button" class="box" :value="i + '|' + (1 + i)" />
+          <div class="fl interval" v-for="i in bottom_right_2" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+            <input type="button" class="box" :value="i.name" :id="i.id" />
           </div>
         </div>
 
@@ -83,9 +83,7 @@
         <input class="right-box" type="button" value="P" />
       </div>
     </div>
-
-
-
+    <div id="close">x</div>
     <slot></slot>
   </div>
 </template>
@@ -93,9 +91,137 @@
 <script>
 export default {
   name: 'toothSelector',
-  data() {
+  data () {
     return {
-      
+      teethInfo: [
+        {'name': '8|7', 'chosen': false, 'id': 1},
+        {'name': '7|6', 'chosen': false, 'id': 2},
+        {'name': '6|5', 'chosen': false, 'id': 3},
+        {'name': '5|4', 'chosen': false, 'id': 4},
+        {'name': '4|3', 'chosen': false, 'id': 5},
+        {'name': '3|2', 'chosen': false, 'id': 6},
+        {'name': '2|1', 'chosen': false, 'id': 7},
+        {'name': '8', 'chosen': false, 'id': 8},
+        {'name': '7', 'chosen': false, 'id': 9},
+        {'name': '6', 'chosen': false, 'id': 10},
+        {'name': '5', 'chosen': false, 'id': 11},
+        {'name': '4', 'chosen': false, 'id': 12},
+        {'name': '3', 'chosen': false, 'id': 13},
+        {'name': '2', 'chosen': false, 'id': 14},
+        {'name': '1', 'chosen': false, 'id': 15},
+        {'name': '1|2', 'chosen': false, 'id': 16},
+        {'name': '2|3', 'chosen': false, 'id': 17},
+        {'name': '3|4', 'chosen': false, 'id': 18},
+        {'name': '4|5', 'chosen': false, 'id': 19},
+        {'name': '5|6', 'chosen': false, 'id': 20},
+        {'name': '6|7', 'chosen': false, 'id': 21},
+        {'name': '7|8', 'chosen': false, 'id': 22},
+        {'name': '1', 'chosen': false, 'id': 23},
+        {'name': '2', 'chosen': false, 'id': 24},
+        {'name': '3', 'chosen': false, 'id': 25},
+        {'name': '4', 'chosen': false, 'id': 26},
+        {'name': '5', 'chosen': false, 'id': 27},
+        {'name': '6', 'chosen': false, 'id': 28},
+        {'name': '7', 'chosen': false, 'id': 29},
+        {'name': '8', 'chosen': false, 'id': 30},
+        {'name': '8', 'chosen': false, 'id': 31},
+        {'name': '7', 'chosen': false, 'id': 32},
+        {'name': '6', 'chosen': false, 'id': 33},
+        {'name': '5', 'chosen': false, 'id': 34},
+        {'name': '4', 'chosen': false, 'id': 35},
+        {'name': '3', 'chosen': false, 'id': 36},
+        {'name': '2', 'chosen': false, 'id': 37},
+        {'name': '1', 'chosen': false, 'id': 38},
+        {'name': '8|7', 'chosen': false, 'id': 39},
+        {'name': '7|6', 'chosen': false, 'id': 40},
+        {'name': '6|5', 'chosen': false, 'id': 41},
+        {'name': '5|4', 'chosen': false, 'id': 42},
+        {'name': '4|3', 'chosen': false, 'id': 43},
+        {'name': '3|2', 'chosen': false, 'id': 44},
+        {'name': '2|1', 'chosen': false, 'id': 45},
+        {'name': '1', 'chosen': false, 'id': 46},
+        {'name': '2', 'chosen': false, 'id': 47},
+        {'name': '3', 'chosen': false, 'id': 48},
+        {'name': '4', 'chosen': false, 'id': 49},
+        {'name': '5', 'chosen': false, 'id': 50},
+        {'name': '6', 'chosen': false, 'id': 51},
+        {'name': '7', 'chosen': false, 'id': 52},
+        {'name': '8', 'chosen': false, 'id': 53},
+        {'name': '1|2', 'chosen': false, 'id': 54},
+        {'name': '2|3', 'chosen': false, 'id': 55},
+        {'name': '3|4', 'chosen': false, 'id': 56},
+        {'name': '4|5', 'chosen': false, 'id': 57},
+        {'name': '5|6', 'chosen': false, 'id': 58},
+        {'name': '6|7', 'chosen': false, 'id': 59},
+        {'name': '7|8', 'chosen': false, 'id': 60},
+        {'name': '1|1', 'chosen': false, 'id': 61},
+        {'name': '1|1', 'chosen': false, 'id': 62},
+      ],
+      allTeeth: false,
+      topHalfTeeth: false,
+      bottomHalfTeeth: false,
+      isChosen: true,
+    }
+  },
+  computed: {
+    top_left_1() {
+      return this.teethInfo.filter(i => i.id < 8)
+    },
+    top_left_2() {
+      return this.teethInfo.filter(i => i.id >= 8 && i.id < 16)
+    },
+    top_right_1() {
+      return this.teethInfo.filter(i => i.id >= 16 && i.id < 23)
+    },
+    top_right_2() {
+      return this.teethInfo.filter(i => i.id >= 23 && i.id < 31)
+    },
+    bottom_left_1() {
+      return this.teethInfo.filter(i => i.id >= 31 && i.id < 39)
+    },
+    bottom_left_2() {
+      return this.teethInfo.filter(i => i.id >= 39 && i.id < 46)
+    },
+    bottom_right_1() {
+      return this.teethInfo.filter(i => i.id >= 46 && i.id < 54)
+    },
+    bottom_right_2() {
+      return this.teethInfo.filter(i => i.id >= 54 && i.id < 60)
+    },
+    top_center() {
+      return this.teethInfo.filter(i => i.id === 61)
+    },
+    bottom_center() {
+      return this.teethInfo.filter(i => i.id === 62)
+    }
+    
+  },
+  methods: {
+    choose (e,id) {
+      this.teethInfo[id - 1]['chosen'] = !this.teethInfo[id - 1]['chosen']
+    },
+    allTeethChosen () {
+      this.allTeeth = !this.allTeeth
+      this.teethInfo.map(i => { if (i.id >= 8 && i.id <= 15 || i.id >= 23 && i.id <= 30) i.chosen = this.allTeeth })
+      this.teethInfo.map(i => { if (i.id >= 31 && i.id <= 38 || i.id >= 46 && i.id <= 53) i.chosen = this.allTeeth })
+      this.topHalfTeeth = this.allTeeth
+      this.bottomHalfTeeth = this.allTeeth
+    },
+    topHalfTeethChosen () {
+      this.topHalfTeeth = !this.topHalfTeeth
+      this.teethInfo.map(i => { if (i.id >= 8 && i.id <= 15 || i.id >= 23 && i.id <= 30) i.chosen = this.topHalfTeeth })
+      this.allTeeth = this.topHalfTeeth && this.bottomHalfTeeth
+    },
+    bottomHalfTeethChosen () {
+      this.bottomHalfTeeth = !this.bottomHalfTeeth
+      this.teethInfo.map(i => { if (i.id >= 31 && i.id <= 38 || i.id >= 46 && i.id <= 53) i.chosen = this.bottomHalfTeeth })
+      this.allTeeth = this.topHalfTeeth && this.bottomHalfTeeth
+    },
+    clear () {
+      this.teethInfo.map(i => i.chosen = false)
+      this.allTeeth = false
+      this.topHalfTeeth = false
+      this.bottomHalfTeeth = false
     }
   },
 }
@@ -139,11 +265,12 @@ export default {
   .tooth {
     margin-right: 5px;
     & input {
-      background: url('../assets/tooth.svg') no-repeat center 6px;
+      background: url('../assets/tooth-black.svg') no-repeat center 6px;
       border-width: 0 !important;
     }
     &.orange input {
       color: #fff !important;
+      background: url('../assets/tooth.svg') no-repeat center 6px;
     }
   }
   .y-line {
@@ -177,9 +304,19 @@ export default {
       }
     }
   }
-  #interval-middle {
+  .interval-middle {
     margin-left: 8px;
     margin-right: 6px;
+  }
+  #close {
+    position: absolute;
+    font-size: 20px;
+    right: 15px;
+    top: 10px;
+    color: #888888;
+    &:hover {
+      cursor: pointer;
+    }
   }
 
 
@@ -388,16 +525,7 @@ export default {
       background-color: #fff;
       border-top : 1px solid #D8DCE6;
       border-left: 1px solid #D8DCE6;
-      box-shadow: -2px -2px 3px -1px  #888888;
-    }
-    &:after {
-      content: '';
-      position: absolute;
-      background-color: pink;
-      width: 15px;
-      height: 15px;
-      right: 15px;
-      top: 15px;
+      box-shadow: -1px -1px 1px -1px  #888888;
     }
   }
 
