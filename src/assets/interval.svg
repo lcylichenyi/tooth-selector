@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="43px" viewBox="0 0 30 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <title>Combined Shape</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="任务-咨询任务--申请X光检查" transform="translate(-329.000000, -555.000000)" fill="#EF8200">
+            <g id="Group-42" transform="translate(52.000000, 487.000000)">
+                <g id="Group-38" transform="translate(19.000000, 68.000000)">
+                    <g id="Group-37" transform="translate(18.000000, 0.000000)">
+                        <g id="Group-35-Copy-6" transform="translate(240.000000, 0.000000)">
+                            <path d="M18,24 L18,40 C18,41.6568542 16.6568542,43 15,43 C13.3431458,43 12,41.6568542 12,40 L12,24 L4,24 C1.790861,24 2.705415e-16,22.209139 0,20 L0,4 C-2.705415e-16,1.790861 1.790861,4.05812251e-16 4,0 L26,0 C28.209139,-4.05812251e-16 30,1.790861 30,4 L30,20 C30,22.209139 28.209139,24 26,24 L18,24 Z" id="Combined-Shape"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -8,43 +8,56 @@
     </div>
     <div class="body-left">
       <div class="body-left-1 clearfix">
-        <div class="fl interval" v-for="i in 7" :key="i + 'a1'">
-          <input type="button" class="box" :value="9 - i + '|' + (8 - i)" />
+        <div class="clearfix" id="body-left-1-line-1">
+          <div class="fl interval" v-for="i in 7" :key="i + 'a1'">
+            <input type="button" class="box" :value="9 - i + '|' + (8 - i)" />
+          </div>
+          <div class="fl interval">
+            <input type="button" class="box" value="1|1" id="interval-middle" />
+          </div>
+          <div class="fl interval" v-for="i in 7" :key="i + 'b1'">
+            <input type="button" class="box" :value="i + '|' + (1 + i)" />
+          </div>
+          <br />
+          <br />
+
+
         </div>
-        <div class="fl interval">
-          <input type="button" class="box" value="1|1" />
-        </div>
-        <div class="fl interval" v-for="i in 7" :key="i + 'b1'">
-          <input type="button" class="box" :value="i + '|' + (1 + i)" />
-        </div>
-        <br />
-        <br />
-        <div class="fl tooth" v-for="i in 8" :key="i + 'a2'">
-          <input type="button" class="box" :value="9 - i" />
-        </div>
-        <div class="fl tooth" v-for="i in 8" :key="i + 'b2'">
-          <input type="button" class="box" :value="i" />          
+        <div class="clearfix" id="body-left-1-line-2">
+          <div class="fl tooth orange" v-for="i in 8" :key="i + 'a2'">
+            <input type="button" class="box" :value="9 - i" />
+          </div>
+          <div class="y-line"></div>
+          <div class="fl tooth" v-for="i in 8" :key="i + 'b2'">
+            <input type="button" class="box" :value="i" />          
+          </div>
         </div>
       </div>
       <div class="line"></div>
       <div class="body-left-2 clearfix">
-        <div class="fl tooth" v-for="i in 8" :key="i + 'c1'">
-          <input type="button" class="box" :value="9 - i" />
+        <div class="clearfix" id="body-left-2-line-1">
+          <div class="fl tooth" v-for="i in 8" :key="i + 'c1'">
+            <input type="button" class="box" :value="9 - i" />
+          </div>
+          <div class="y-line"></div>
+          <div class="fl tooth" v-for="i in 8" :key="i + 'd1'">
+            <input type="button" class="box" :value="i" />
+          </div>
+          <br />
+          <br />
         </div>
-        <div class="fl tooth" v-for="i in 8" :key="i + 'd1'">
-          <input type="button" class="box" :value="i" />
+        <div class="clearfix" id="body-left-2-line-2">
+          <div class="fl interval orange" v-for="i in 7" :key="i + 'c2'">
+            <input type="button" class="box" :value="9 - i + '|' + (8 - i)" />
+          </div>
+          <div class="fl interval">
+            <input type="button" class="box" value="1|1" id="interval-middle" />
+          </div>
+          <div class="fl interval" v-for="i in 7" :key="i + 'd2'">
+            <input type="button" class="box" :value="i + '|' + (1 + i)" />
+          </div>
         </div>
-        <br />
-        <br />
-        <div class="fl interval" v-for="i in 7" :key="i + 'c2'">
-          <input type="button" class="box" :value="9 - i + '|' + (8 - i)" />
-        </div>
-        <div class="fl interval">
-          <input type="button" class="box" value="1|1" />
-        </div>
-        <div class="fl interval" v-for="i in 7" :key="i + 'd2'">
-          <input type="button" class="box" :value="i + '|' + (1 + i)" />
-        </div>
+
       </div>
     </div>
     <div class="body-right">
@@ -108,10 +121,67 @@ export default {
     &:hover {
       cursor: pointer;
     }
+    &:focus {
+      outline: none;
+    }
   }
   .fl {
     float: left;
   }
+  #body-left-1-line-1 {
+    margin-left: 23px;
+  }
+  #body-left-2-line-2 {
+    margin-top: 10px;
+    margin-left: 23px;
+  }
+
+  .tooth {
+    margin-right: 5px;
+    & input {
+      background: url('../assets/tooth.svg') no-repeat center 6px;
+      border-width: 0 !important;
+    }
+    &.orange input {
+      color: #fff !important;
+    }
+  }
+  .y-line {
+    width: 16px;
+    height: 10px;
+    float: left;
+    position: relative;
+    &:after {
+      content: '';
+      z-index: -1;
+      top: -5px;
+      width: 2px;
+      left: 5px;
+      height: 70px;
+      position: absolute;
+      background-color: #C1C1C1;
+    }
+  }
+  .interval {
+    margin-right: 10px;
+    & > input {
+      width: 30px !important;
+    }
+    &.orange {
+      & input {
+        background-color: #EF8200 !important;
+        color: #fff !important;
+      }
+      &:after {
+        background-color: #EF8200 !important;
+      }
+    }
+  }
+  #interval-middle {
+    margin-left: 8px;
+    margin-right: 6px;
+  }
+
 
   @mixin normalBox () {
     box-sizing: border-box;
@@ -124,6 +194,7 @@ export default {
   }
   
   .container {
+    // left: 25px;
     box-sizing: border-box;
     width: 896px;
     height: 255px;
@@ -131,6 +202,7 @@ export default {
     border: 1px solid #D8DCE6;
     border-radius: 5px;
     box-shadow: 0px 2px 5px #888888;
+    position: absolute;
       & > .header {
         margin-top: 10px;
         margin-left: 166px;
@@ -160,29 +232,58 @@ export default {
         & .tooth {
           position: relative;
         }
-        & .interval {
-          position: relative;
-          input {
-            padding-top: 0px;
-            height: 25px;
-            line-height: 25px;
-            border-radius: 5px;
-          }
-          &:after {
-            content: "";
-            height: 17px;
-            width: 4px;
-            position: absolute;
-            border: 1px solid #D8DCE6;
-            border-bottom-right-radius: 15px;
-            border-bottom-left-radius: 15px;
-            z-index: 3;
-            right: 50% - 10;
-            top: 100% - 5;
-            border-top-width: 0px;
-            background-color: #fff;
+        & .body-left-1 {
+          & .interval {
+            position: relative;
+            input {
+              padding-top: 0px;
+              height: 25px;
+              line-height: 25px;
+              border-radius: 5px;
+            }
+            &:after {
+              content: "";
+              height: 17px;
+              width: 4px;
+              position: absolute;
+              border: 1px solid #D8DCE6;
+              border-bottom-right-radius: 15px;
+              border-bottom-left-radius: 15px;
+              z-index: 3;
+              right: 50% - 10;
+              top: 100% - 5;
+              border-top-width: 0px;
+              background-color: #fff;
+            }
           }
         }
+
+        & .body-left-2 {
+          & .interval {
+            position: relative;
+            input {
+              padding-top: 0px;
+              height: 25px;
+              line-height: 25px;
+              border-radius: 5px;
+            }
+            &:after {
+              content: "";
+              height: 17px;
+              width: 4px;
+              position: absolute;
+              border: 1px solid #D8DCE6;
+              border-top-right-radius: 15px;
+              border-top-left-radius: 15px;
+              z-index: 3;
+              right: 50% - 10;
+              bottom: 100% - 5;
+              border-bottom-width: 0px;
+              background-color: #fff;
+            }
+          }
+        }
+
         & > .line {
           width: 644px;
           margin-top: 10px;
@@ -275,7 +376,29 @@ export default {
           }
         }
       }
-
+    &:before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      position: absolute;
+      top: -6px;
+      left: 110px;
+      transform: rotateZ(45deg);
+      z-index: 22;
+      background-color: #fff;
+      border-top : 1px solid #D8DCE6;
+      border-left: 1px solid #D8DCE6;
+      box-shadow: -2px -2px 3px -1px  #888888;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      background-color: pink;
+      width: 15px;
+      height: 15px;
+      right: 15px;
+      top: 15px;
+    }
   }
 
 
