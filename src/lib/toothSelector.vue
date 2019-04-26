@@ -73,14 +73,15 @@
       </div>
       <div class="right-line"></div>
       <div class="right-body">
-        <input class="right-box active" type="button" value="La" />
+        <!-- <input class="right-box active" type="button" value="La" />
         <input class="right-box" type="button" value="B" />
         <input class="right-box" type="button" value="F" />
         <input class="right-box" type="button" value="M" />
         <input class="right-box" type="button" value="O" />
         <input class="right-box" type="button" value="D" />
         <input class="right-box" type="button" value="L" />
-        <input class="right-box" type="button" value="P" />
+        <input class="right-box" type="button" value="P" /> -->
+        <input type="button"  class="right-box" v-for="i in locationInfo" :key="i.name" :value="i.name" @click="chooseLocation($event,i.id)" :class="{'active': locationInfo[i.id - 1]['chosen'] === true}" />
       </div>
     </div>
     <div id="close">x</div>
@@ -157,10 +158,21 @@ export default {
         {'name': '1|1', 'chosen': false, 'id': 61},
         {'name': '1|1', 'chosen': false, 'id': 62},
       ],
+      locationInfo: [
+        {name: 'La', id: 1, chosen: false},
+        {name: 'B', id: 2, chosen: false},
+        {name: 'F', id: 3, chosen: false},
+        {name: 'M', id: 4, chosen: false},
+        {name: 'O/I', id: 5, chosen: false},
+        {name: 'D', id: 6, chosen: false},
+        {name: 'L', id: 7, chosen: false},
+        {name: 'P', id: 8, chosen: false},
+      ], 
       allTeeth: false,
       topHalfTeeth: false,
       bottomHalfTeeth: false,
       isChosen: true,
+      history: [],
     }
   },
   computed: {
@@ -197,13 +209,39 @@ export default {
     
   },
   methods: {
-    choose (e,id) {
+    choose (e, id) {
       this.teethInfo[id - 1]['chosen'] = !this.teethInfo[id - 1]['chosen']
+      const name = this.teethInfo[id - 1]['name'].length > 1 ? this.teethInfo[id - 1]['name'] : '<' + this.teethInfo[id - 1]['name'] + '>'
+      this.updateHistory(name, this.teethInfo[id - 1]['chosen'])
+    },
+    chooseLocation (e, id) {
+      this.locationInfo[id - 1]['chosen'] = !this.locationInfo[id - 1]['chosen']
+      const name = this.locationInfo[id - 1]['name']
+      this.updateHistory(name, this.locationInfo[id - 1]['chosen'])
+      
     },
     allTeethChosen () {
       this.allTeeth = !this.allTeeth
-      this.teethInfo.map(i => { if (i.id >= 8 && i.id <= 15 || i.id >= 23 && i.id <= 30) i.chosen = this.allTeeth })
-      this.teethInfo.map(i => { if (i.id >= 31 && i.id <= 38 || i.id >= 46 && i.id <= 53) i.chosen = this.allTeeth })
+      this.teethInfo.map(i => { 
+        if (i.id >= 8 && i.id <= 15 || i.id >= 23 && i.id <= 30) { 
+          i.chosen = this.allTeeth
+          if (this.allTeeth) {
+            this.updateHistory(i.name, this.allTeeth)
+          } else {
+            this.clearHistory()
+          }
+        } 
+      })
+      this.teethInfo.map(i => { 
+        if (i.id >= 31 && i.id <= 38 || i.id >= 46 && i.id <= 53) { 
+          i.chosen = this.allTeeth
+          if (this.allTeeth) {
+            this.updateHistory(i.name, this.allTeeth)
+          } else {
+            this.clearHistory()
+          }
+        } 
+      })
       this.topHalfTeeth = this.allTeeth
       this.bottomHalfTeeth = this.allTeeth
     },
@@ -222,7 +260,19 @@ export default {
       this.allTeeth = false
       this.topHalfTeeth = false
       this.bottomHalfTeeth = false
-    }
+      this.clearHistory()
+    },
+    updateHistory (data, flag = true) {
+      if (flag) {
+        this.history.push(data)
+      } else {
+        this.history = this.history.filter(i => i !== data)
+      }
+      console.log(this.history)
+    },
+    clearHistory () {
+      this.history = []
+    },
   },
 }
 </script>
@@ -506,6 +556,8 @@ export default {
             border-radius: 5px;
             line-height: 30px;
             margin-bottom: 10px;
+            margin-right: 3px;
+            margin-left: 3px;
             &.active {
               border-color: #EF8200;
               color: #EF8200;
