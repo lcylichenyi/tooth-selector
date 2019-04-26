@@ -95,68 +95,68 @@ export default {
   data () {
     return {
       teethInfo: [
-        {'name': '8|7', 'chosen': false, 'id': 1},
-        {'name': '7|6', 'chosen': false, 'id': 2},
-        {'name': '6|5', 'chosen': false, 'id': 3},
-        {'name': '5|4', 'chosen': false, 'id': 4},
-        {'name': '4|3', 'chosen': false, 'id': 5},
-        {'name': '3|2', 'chosen': false, 'id': 6},
-        {'name': '2|1', 'chosen': false, 'id': 7},
-        {'name': '8', 'chosen': false, 'id': 8},
-        {'name': '7', 'chosen': false, 'id': 9},
-        {'name': '6', 'chosen': false, 'id': 10},
-        {'name': '5', 'chosen': false, 'id': 11},
-        {'name': '4', 'chosen': false, 'id': 12},
-        {'name': '3', 'chosen': false, 'id': 13},
-        {'name': '2', 'chosen': false, 'id': 14},
-        {'name': '1', 'chosen': false, 'id': 15},
-        {'name': '1|2', 'chosen': false, 'id': 16},
-        {'name': '2|3', 'chosen': false, 'id': 17},
-        {'name': '3|4', 'chosen': false, 'id': 18},
-        {'name': '4|5', 'chosen': false, 'id': 19},
-        {'name': '5|6', 'chosen': false, 'id': 20},
-        {'name': '6|7', 'chosen': false, 'id': 21},
-        {'name': '7|8', 'chosen': false, 'id': 22},
-        {'name': '1', 'chosen': false, 'id': 23},
-        {'name': '2', 'chosen': false, 'id': 24},
-        {'name': '3', 'chosen': false, 'id': 25},
-        {'name': '4', 'chosen': false, 'id': 26},
-        {'name': '5', 'chosen': false, 'id': 27},
-        {'name': '6', 'chosen': false, 'id': 28},
-        {'name': '7', 'chosen': false, 'id': 29},
-        {'name': '8', 'chosen': false, 'id': 30},
-        {'name': '8', 'chosen': false, 'id': 31},
-        {'name': '7', 'chosen': false, 'id': 32},
-        {'name': '6', 'chosen': false, 'id': 33},
-        {'name': '5', 'chosen': false, 'id': 34},
-        {'name': '4', 'chosen': false, 'id': 35},
-        {'name': '3', 'chosen': false, 'id': 36},
-        {'name': '2', 'chosen': false, 'id': 37},
-        {'name': '1', 'chosen': false, 'id': 38},
-        {'name': '8|7', 'chosen': false, 'id': 39},
-        {'name': '7|6', 'chosen': false, 'id': 40},
-        {'name': '6|5', 'chosen': false, 'id': 41},
-        {'name': '5|4', 'chosen': false, 'id': 42},
-        {'name': '4|3', 'chosen': false, 'id': 43},
-        {'name': '3|2', 'chosen': false, 'id': 44},
-        {'name': '2|1', 'chosen': false, 'id': 45},
-        {'name': '1', 'chosen': false, 'id': 46},
-        {'name': '2', 'chosen': false, 'id': 47},
-        {'name': '3', 'chosen': false, 'id': 48},
-        {'name': '4', 'chosen': false, 'id': 49},
-        {'name': '5', 'chosen': false, 'id': 50},
-        {'name': '6', 'chosen': false, 'id': 51},
-        {'name': '7', 'chosen': false, 'id': 52},
-        {'name': '8', 'chosen': false, 'id': 53},
-        {'name': '1|2', 'chosen': false, 'id': 54},
-        {'name': '2|3', 'chosen': false, 'id': 55},
-        {'name': '3|4', 'chosen': false, 'id': 56},
-        {'name': '4|5', 'chosen': false, 'id': 57},
-        {'name': '5|6', 'chosen': false, 'id': 58},
-        {'name': '6|7', 'chosen': false, 'id': 59},
-        {'name': '7|8', 'chosen': false, 'id': 60},
-        {'name': '1|1', 'chosen': false, 'id': 61},
-        {'name': '1|1', 'chosen': false, 'id': 62},
+        {'name': '8|7', 'chosen': false, 'id': 1, 'location': 'a'},
+        {'name': '7|6', 'chosen': false, 'id': 2, 'location': 'a'},
+        {'name': '6|5', 'chosen': false, 'id': 3, 'location': 'a'},
+        {'name': '5|4', 'chosen': false, 'id': 4, 'location': 'a'},
+        {'name': '4|3', 'chosen': false, 'id': 5, 'location': 'a'},
+        {'name': '3|2', 'chosen': false, 'id': 6, 'location': 'a'},
+        {'name': '2|1', 'chosen': false, 'id': 7, 'location': 'a'},
+        {'name': '8', 'chosen': false, 'id': 8, 'location': 'a'},
+        {'name': '7', 'chosen': false, 'id': 9, 'location': 'a'},
+        {'name': '6', 'chosen': false, 'id': 10, 'location': 'a'},
+        {'name': '5', 'chosen': false, 'id': 11, 'location': 'a'},
+        {'name': '4', 'chosen': false, 'id': 12, 'location': 'a'},
+        {'name': '3', 'chosen': false, 'id': 13, 'location': 'a'},
+        {'name': '2', 'chosen': false, 'id': 14, 'location': 'a'},
+        {'name': '1', 'chosen': false, 'id': 15, 'location': 'a'},
+        {'name': '1|2', 'chosen': false, 'id': 16, 'location': 'b'},
+        {'name': '2|3', 'chosen': false, 'id': 17, 'location': 'b'},
+        {'name': '3|4', 'chosen': false, 'id': 18, 'location': 'b'},
+        {'name': '4|5', 'chosen': false, 'id': 19, 'location': 'b'},
+        {'name': '5|6', 'chosen': false, 'id': 20, 'location': 'b'},
+        {'name': '6|7', 'chosen': false, 'id': 21, 'location': 'b'},
+        {'name': '7|8', 'chosen': false, 'id': 22, 'location': 'b'},
+        {'name': '1', 'chosen': false, 'id': 23, 'location': 'b'},
+        {'name': '2', 'chosen': false, 'id': 24, 'location': 'b'},
+        {'name': '3', 'chosen': false, 'id': 25, 'location': 'b'},
+        {'name': '4', 'chosen': false, 'id': 26, 'location': 'b'},
+        {'name': '5', 'chosen': false, 'id': 27, 'location': 'b'},
+        {'name': '6', 'chosen': false, 'id': 28, 'location': 'b'},
+        {'name': '7', 'chosen': false, 'id': 29, 'location': 'b'},
+        {'name': '8', 'chosen': false, 'id': 30, 'location': 'b'},
+        {'name': '8', 'chosen': false, 'id': 31, 'location': 'c'},
+        {'name': '7', 'chosen': false, 'id': 32, 'location': 'c'},
+        {'name': '6', 'chosen': false, 'id': 33, 'location': 'c'},
+        {'name': '5', 'chosen': false, 'id': 34, 'location': 'c'},
+        {'name': '4', 'chosen': false, 'id': 35, 'location': 'c'},
+        {'name': '3', 'chosen': false, 'id': 36, 'location': 'c'},
+        {'name': '2', 'chosen': false, 'id': 37, 'location': 'c'},
+        {'name': '1', 'chosen': false, 'id': 38, 'location': 'c'},
+        {'name': '8|7', 'chosen': false, 'id': 39, 'location': 'c'},
+        {'name': '7|6', 'chosen': false, 'id': 40, 'location': 'c'},
+        {'name': '6|5', 'chosen': false, 'id': 41, 'location': 'c'},
+        {'name': '5|4', 'chosen': false, 'id': 42, 'location': 'c'},
+        {'name': '4|3', 'chosen': false, 'id': 43, 'location': 'c'},
+        {'name': '3|2', 'chosen': false, 'id': 44, 'location': 'c'},
+        {'name': '2|1', 'chosen': false, 'id': 45, 'location': 'c'},
+        {'name': '1', 'chosen': false, 'id': 46, 'location': 'd'},
+        {'name': '2', 'chosen': false, 'id': 47, 'location': 'd'},
+        {'name': '3', 'chosen': false, 'id': 48, 'location': 'd'},
+        {'name': '4', 'chosen': false, 'id': 49, 'location': 'd'},
+        {'name': '5', 'chosen': false, 'id': 50, 'location': 'd'},
+        {'name': '6', 'chosen': false, 'id': 51, 'location': 'd'},
+        {'name': '7', 'chosen': false, 'id': 52, 'location': 'd'},
+        {'name': '8', 'chosen': false, 'id': 53, 'location': 'd'},
+        {'name': '1|2', 'chosen': false, 'id': 54, 'location': 'd'},
+        {'name': '2|3', 'chosen': false, 'id': 55, 'location': 'd'},
+        {'name': '3|4', 'chosen': false, 'id': 56, 'location': 'd'},
+        {'name': '4|5', 'chosen': false, 'id': 57, 'location': 'd'},
+        {'name': '5|6', 'chosen': false, 'id': 58, 'location': 'd'},
+        {'name': '6|7', 'chosen': false, 'id': 59, 'location': 'd'},
+        {'name': '7|8', 'chosen': false, 'id': 60, 'location': 'd'},
+        {'name': '1|1', 'chosen': false, 'id': 61, 'location': 'd'},
+        {'name': '1|1', 'chosen': false, 'id': 62, 'location': 'd'},
       ],
       locationInfo: [
         {name: 'La', id: 1, chosen: false},
@@ -198,7 +198,7 @@ export default {
       return this.teethInfo.filter(i => i.id >= 46 && i.id < 54)
     },
     bottom_right_2() {
-      return this.teethInfo.filter(i => i.id >= 54 && i.id < 60)
+      return this.teethInfo.filter(i => i.id >= 54 && i.id < 61)
     },
     top_center() {
       return this.teethInfo.filter(i => i.id === 61)
@@ -211,7 +211,8 @@ export default {
   methods: {
     choose (e, id) {
       this.teethInfo[id - 1]['chosen'] = !this.teethInfo[id - 1]['chosen']
-      const name = this.teethInfo[id - 1]['name'].length > 1 ? this.teethInfo[id - 1]['name'] : '<' + this.teethInfo[id - 1]['name'] + '>'
+      let name = this.teethInfo[id - 1]['name'].length < 2 ? this.teethInfo[id - 1]['name'] : '<' + this.teethInfo[id - 1]['name'] + '>'
+      name = this.teethInfo[id - 1]['location'] + name
       this.updateHistory(name, this.teethInfo[id - 1]['chosen'])
     },
     chooseLocation (e, id) {
@@ -226,7 +227,7 @@ export default {
         if (i.id >= 8 && i.id <= 15 || i.id >= 23 && i.id <= 30) { 
           i.chosen = this.allTeeth
           if (this.allTeeth) {
-            this.updateHistory(i.name, this.allTeeth)
+            this.updateHistory(i.location + i.name, this.allTeeth)
           } else {
             this.clearHistory()
           }
@@ -236,7 +237,7 @@ export default {
         if (i.id >= 31 && i.id <= 38 || i.id >= 46 && i.id <= 53) { 
           i.chosen = this.allTeeth
           if (this.allTeeth) {
-            this.updateHistory(i.name, this.allTeeth)
+            this.updateHistory(i.location + i.name, this.allTeeth)
           } else {
             this.clearHistory()
           }
@@ -266,6 +267,7 @@ export default {
       if (flag) {
         this.history.push(data)
       } else {
+        console.log(data)
         this.history = this.history.filter(i => i !== data)
       }
       console.log(this.history)
