@@ -81,7 +81,7 @@
         <input class="right-box" type="button" value="D" />
         <input class="right-box" type="button" value="L" />
         <input class="right-box" type="button" value="P" /> -->
-        <input type="button"  class="right-box" v-for="i in locationInfo" :key="i.name" :value="i.name" @click="chooseLocation($event,i.id)" :class="{'active': locationInfo[i.id - 1]['chosen'] === true}" />
+        <input type="button"  class="right-box" v-for="i in locationInfo" :key="i.name" :value="i.name" @click="chooseLocation($event,i.id)" :class="{'active': locationInfo[i.id - 1]['chosen'] === true}" :title="i.title" />
       </div>
     </div>
     <div id="close">x</div>
@@ -155,24 +155,24 @@ export default {
         {'name': '5|6', 'chosen': false, 'id': 58, 'location': 'd'},
         {'name': '6|7', 'chosen': false, 'id': 59, 'location': 'd'},
         {'name': '7|8', 'chosen': false, 'id': 60, 'location': 'd'},
-        {'name': '1|1', 'chosen': false, 'id': 61, 'location': 'd'},
-        {'name': '1|1', 'chosen': false, 'id': 62, 'location': 'd'},
+        {'name': '1|1', 'chosen': false, 'id': 61, 'location': 'e'},
+        {'name': '1|1', 'chosen': false, 'id': 62, 'location': 'f'},
       ],
       locationInfo: [
-        {name: 'La', id: 1, chosen: false},
-        {name: 'B', id: 2, chosen: false},
-        {name: 'F', id: 3, chosen: false},
-        {name: 'M', id: 4, chosen: false},
-        {name: 'O/I', id: 5, chosen: false},
-        {name: 'D', id: 6, chosen: false},
-        {name: 'L', id: 7, chosen: false},
-        {name: 'P', id: 8, chosen: false},
+        {'name': 'La', 'id': 1, 'chosen': false, 'title': '唇面'},
+        {'name': 'B', 'id': 2, 'chosen': false, 'title': '颊面'},
+        {'name': 'F', 'id': 3, 'chosen': false, 'title': '唇面颊面'},
+        {'name': 'M', 'id': 4, 'chosen': false, 'title': '近中面'},
+        {'name': 'O/I', 'id': 5, 'chosen': false, 'title': '颌面/切缘'},
+        {'name': 'D', 'id': 6, 'chosen': false, 'title': '远中面'},
+        {'name': 'L', 'id': 7, 'chosen': false, 'title': '舌侧'},
+        {'name': 'P', 'id': 8, 'chosen': false, 'title': '腭侧'},
       ], 
       allTeeth: false,
       topHalfTeeth: false,
       bottomHalfTeeth: false,
       isChosen: true,
-      history: [],
+      history: new Map(),
     }
   },
   computed: {
@@ -210,16 +210,22 @@ export default {
   },
   methods: {
     choose (e, id) {
-      this.teethInfo[id - 1]['chosen'] = !this.teethInfo[id - 1]['chosen']
+      const flag = this.teethInfo[id - 1]['chosen'] = !this.teethInfo[id - 1]['chosen']
       let name = this.teethInfo[id - 1]['name'].length < 2 ? this.teethInfo[id - 1]['name'] : '<' + this.teethInfo[id - 1]['name'] + '>'
       name = this.teethInfo[id - 1]['location'] + name
-      this.updateHistory(name, this.teethInfo[id - 1]['chosen'])
+      this.updateHistory(name, flag)
+      this.clearLocation()
     },
     chooseLocation (e, id) {
-      this.locationInfo[id - 1]['chosen'] = !this.locationInfo[id - 1]['chosen']
-      const name = this.locationInfo[id - 1]['name']
-      this.updateHistory(name, this.locationInfo[id - 1]['chosen'])
-      
+      console.log(this.history)
+      if (this.history.size !== 0) {
+        const lastKey = [...this.history.keys()].pop()
+        let lastValue = [...this.history.values()].pop()
+        lastValue = lastValue === null ? '' : lastValue
+        const flag = this.locationInfo[id - 1]['chosen'] = !this.locationInfo[id - 1]['chosen']
+        const name = this.locationInfo[id - 1]['name']
+        this.updateLocation(lastKey, lastValue, name, flag)
+      }
     },
     allTeethChosen () {
       this.allTeeth = !this.allTeeth
@@ -243,17 +249,30 @@ export default {
           }
         } 
       })
+      this.clearLocation()
       this.topHalfTeeth = this.allTeeth
       this.bottomHalfTeeth = this.allTeeth
     },
     topHalfTeethChosen () {
       this.topHalfTeeth = !this.topHalfTeeth
       this.teethInfo.map(i => { if (i.id >= 8 && i.id <= 15 || i.id >= 23 && i.id <= 30) i.chosen = this.topHalfTeeth })
+      this.teethInfo.map(i => { 
+        if (i.id >= 8 && i.id <= 15 || i.id >= 23 && i.id <= 30) { 
+          i.chosen = this.topHalfTeeth
+          this.updateHistory(i.location + i.name, this.topHalfTeeth)
+        } 
+      })
       this.allTeeth = this.topHalfTeeth && this.bottomHalfTeeth
     },
     bottomHalfTeethChosen () {
       this.bottomHalfTeeth = !this.bottomHalfTeeth
       this.teethInfo.map(i => { if (i.id >= 31 && i.id <= 38 || i.id >= 46 && i.id <= 53) i.chosen = this.bottomHalfTeeth })
+      this.teethInfo.map(i => { 
+        if (i.id >= 31 && i.id <= 38 || i.id >= 46 && i.id <= 53) { 
+          i.chosen = this.bottomHalfTeeth
+          this.updateHistory(i.location + i.name, this.bottomHalfTeeth)
+        } 
+      })
       this.allTeeth = this.topHalfTeeth && this.bottomHalfTeeth
     },
     clear () {
@@ -265,17 +284,38 @@ export default {
     },
     updateHistory (data, flag = true) {
       if (flag) {
-        this.history.push(data)
+        this.history.set(data, null)
       } else {
-        console.log(data)
-        this.history = this.history.filter(i => i !== data)
+        this.history.delete(data)
+      }
+      console.log(this.history)
+
+    },
+    clearHistory () {
+      this.history.clear()
+    },
+    updateLocation (lastKey, oldLocation, newLocation, flag = true) {
+      let loc
+      if (flag) {
+        loc = oldLocation + newLocation
+        this.history.set(lastKey, loc)
+      } else {
+        loc = oldLocation.replace(newLocation, '')
+        this.history.set(lastKey, loc)
       }
       console.log(this.history)
     },
-    clearHistory () {
-      this.history = []
-    },
+    clearLocation () {
+      this.locationInfo.map(i => i.chosen = false)
+    }
   },
+  watch: {
+    history: {
+      handler: function (newVal) {
+        const len = newVal.length
+      }
+    }
+  }
 }
 </script>
 
