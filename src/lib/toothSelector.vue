@@ -64,10 +64,10 @@
       <div class="right-header">
         <div class="right-header-center">
           <ul>
-            <li>5</li><li>5</li>
+            <li>{{a}}</li><li>{{b}}</li>
           </ul>
           <ul>
-            <li>5</li><li>5</li>
+            <li>{{c}}</li><li>{{d}}</li>
           </ul>
         </div>
       </div>
@@ -168,11 +168,16 @@ export default {
         {'name': 'L', 'id': 7, 'chosen': false, 'title': '舌侧'},
         {'name': 'P', 'id': 8, 'chosen': false, 'title': '腭侧'},
       ], 
+      intervalId: [1, 2, 3, 4, 5, 6, 7, 16, 17, 18, 19, 20, 21, 22, 39, 40, 41, 42, 43, 44, 45, 54, 55, 56, 57, 58, 59, 60, 61, 62],
       allTeeth: false,
       topHalfTeeth: false,
       bottomHalfTeeth: false,
       isChosen: true,
       history: new Map(),
+      a: null,
+      b: null,
+      c: null,
+      d: null,
     }
   },
   computed: {
@@ -215,6 +220,10 @@ export default {
       name = this.teethInfo[id - 1]['location'] + name
       this.updateHistory(name, flag)
       this.clearLocation()
+      if (this.intervalId.includes(id)) {
+        return
+      }
+      this.displayCordinate(name, flag)
     },
     chooseLocation (e, id) {
       console.log(this.history)
@@ -281,6 +290,8 @@ export default {
       this.topHalfTeeth = false
       this.bottomHalfTeeth = false
       this.clearHistory()
+      this.clearLocation()
+      this.hideCordinate()
     },
     updateHistory (data, flag = true) {
       if (flag) {
@@ -307,13 +318,26 @@ export default {
     },
     clearLocation () {
       this.locationInfo.map(i => i.chosen = false)
-    }
-  },
-  watch: {
-    history: {
-      handler: function (newVal) {
-        const len = newVal.length
+    },
+    displayCordinate (name, flag) {
+      if (name.length < 3 && flag) {
+        const nameArr = [...name]
+        const positionInfo = nameArr.shift()
+        const newName = nameArr.join('')
+        switch (positionInfo) {
+          case 'a': this.a = newName; this.b = this.c = this.d = '' ; break;
+          case 'b': this.b = newName; this.a = this.c = this.d = ''; break;
+          case 'c': this.c = newName; this.a = this.b = this.d = ''; break;
+          case 'd': this.d = newName; this.a = this.b = this.c = ''; break;
+        }
+      } else if (name.length > 3) {
+        return
+      } else {
+        this.hideCordinate()
       }
+    },
+    hideCordinate () {
+      this.a = this.b = this.c = this.d = ''
     }
   }
 }
