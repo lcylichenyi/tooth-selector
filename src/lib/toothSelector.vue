@@ -229,11 +229,14 @@ export default {
       console.log(this.history)
       if (this.history.size !== 0) {
         const lastKey = [...this.history.keys()].pop()
-        let lastValue = [...this.history.values()].pop()
-        lastValue = lastValue === null ? '' : lastValue
-        const flag = this.locationInfo[id - 1]['chosen'] = !this.locationInfo[id - 1]['chosen']
-        const name = this.locationInfo[id - 1]['name']
-        this.updateLocation(lastKey, lastValue, name, flag)
+        if (lastKey.length < 3) {
+          let lastValue = [...this.history.values()].pop()
+          lastValue = lastValue === null ? '' : lastValue
+          const flag = this.locationInfo[id - 1]['chosen'] = !this.locationInfo[id - 1]['chosen']
+          const name = this.locationInfo[id - 1]['name']
+          this.updateLocation(lastKey, lastValue, name, flag)
+        }
+
       }
     },
     allTeethChosen () {
@@ -259,6 +262,7 @@ export default {
         } 
       })
       this.clearLocation()
+      this.hideCordinate()
       this.topHalfTeeth = this.allTeeth
       this.bottomHalfTeeth = this.allTeeth
     },
@@ -272,6 +276,7 @@ export default {
         } 
       })
       this.allTeeth = this.topHalfTeeth && this.bottomHalfTeeth
+      this.hideCordinate()
     },
     bottomHalfTeethChosen () {
       this.bottomHalfTeeth = !this.bottomHalfTeeth
@@ -283,6 +288,7 @@ export default {
         } 
       })
       this.allTeeth = this.topHalfTeeth && this.bottomHalfTeeth
+      this.hideCordinate()
     },
     clear () {
       this.teethInfo.map(i => i.chosen = false)
