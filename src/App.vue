@@ -1,11 +1,17 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <p>12122<sup>aa</sup> </p>
+    <div>其他的文章内容容容</div>
+    <div>其他的文章内容容容</div>
+    <div>其他的文章内容容容</div>
+    <div>其他的文章内容容容</div>
+    <div>其他的文章内容容容</div>
     <input type="button" value="点我" @click="isShow=!isShow">
+    <!-- <toothSelector v-show='isShow' :historyProp=test /> -->
     <toothSelector v-show='isShow' />
-    <div>bbb</div>
-    <div>ccc</div>
+    <div>其他的文章内容容容</div>
+    <div>其他的文章内容容容</div>
+    <div>其他的文章内容容容</div>
+    <div>其他的文章内容容容</div>
   </div>
 </template>
 
@@ -14,6 +20,7 @@ export default {
   name: 'app',
   data () {
     return {
+      // test: {'d1': 'LaD', 'd2': '', 'a1': 'P', 'a4': 'F', 'b2': '', 'c4': ''},
       isShow: true
     }
   },

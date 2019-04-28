@@ -197,7 +197,8 @@ export default {
       allTeeth: false,
       topHalfTeeth: false,
       bottomHalfTeeth: false,
-      history: new Map(),
+      // history: this.historyProp,
+      history: '',
       a: '',
       b: '',
       c: '',
@@ -210,6 +211,13 @@ export default {
       eString: '',
       fString: '',
       showContainer: false,
+      once: true,
+    }
+  },
+  props: {
+    historyProp: {
+      type: Object,
+      default: () => {}
     }
   },
   computed: {
@@ -260,7 +268,6 @@ export default {
       this.displayCordinate(name, flag)
     },
     chooseLocation (e, id) {
-      this.changeHistoryChangeFlag()
       if (this.history.size !== 0) {
         const lastKey = [...this.history.keys()].pop()
         if (lastKey.length < 3) {
@@ -272,9 +279,9 @@ export default {
         }
 
       }
+      this.changeHistoryChangeFlag()
     },
     allTeethChosen () {
-      this.changeHistoryChangeFlag()
       this.allTeeth = !this.allTeeth
       this.teethInfo.map(i => { 
         if (i.id >= 8 && i.id <= 15 || i.id >= 23 && i.id <= 30) { 
@@ -300,9 +307,9 @@ export default {
       this.hideCordinate()
       this.topHalfTeeth = this.allTeeth
       this.bottomHalfTeeth = this.allTeeth
+      this.changeHistoryChangeFlag()
     },
     topHalfTeethChosen () {
-      this.changeHistoryChangeFlag()
       this.topHalfTeeth = !this.topHalfTeeth
       this.teethInfo.map(i => { if (i.id >= 8 && i.id <= 15 || i.id >= 23 && i.id <= 30) i.chosen = this.topHalfTeeth })
       this.teethInfo.map(i => { 
@@ -313,9 +320,9 @@ export default {
       })
       this.allTeeth = this.topHalfTeeth && this.bottomHalfTeeth
       this.hideCordinate()
+      this.changeHistoryChangeFlag()
     },
     bottomHalfTeethChosen () {
-      this.changeHistoryChangeFlag()
       this.bottomHalfTeeth = !this.bottomHalfTeeth
       this.teethInfo.map(i => { if (i.id >= 31 && i.id <= 38 || i.id >= 46 && i.id <= 53) i.chosen = this.bottomHalfTeeth })
       this.teethInfo.map(i => { 
@@ -326,6 +333,7 @@ export default {
       })
       this.allTeeth = this.topHalfTeeth && this.bottomHalfTeeth
       this.hideCordinate()
+      this.changeHistoryChangeFlag()
     },
     clear () {
       this.teethInfo.map(i => i.chosen = false)
@@ -387,6 +395,7 @@ export default {
       this.historyChangeFlag = !this.historyChangeFlag
     },
     changeTitle (id, flag) {
+      
       if (flag) {
         if (this.titleI.includes(id)) {
           this.locationInfo[4] = {'name': 'I', 'id': 5, 'chosen': false, 'title': '切缘'}
@@ -396,13 +405,40 @@ export default {
           this.locationInfo[4] = {'name': 'O/I', 'id': 5, 'chosen': false, 'title': '颌面/切缘'}
         }
       } else {
-        this.locationInfo[4] = {'name': 'O/I', 'id': 5, 'chosen': false, 'title': '颌面/切缘'}
+        let lastKey = [...this.history.keys()].pop()
+        if (lastKey.length < 3) {
+          let num = lastKey.slice(1)
+          if (num <= 3) {
+            this.locationInfo[4] = {'name': 'I', 'id': 5, 'chosen': false, 'title': '切缘'}
+          } else {
+            this.locationInfo[4] = {'name': 'O', 'id': 5, 'chosen': false, 'title': '颌面'}
+          }
+        } else {
+          this.locationInfo[4] = {'name': 'O/I', 'id': 5, 'chosen': false, 'title': '颌面/切缘'}
+        }
       }
+    },
+    objToStrMap (obj) {
+      let strMap = new Map();
+      for (let k of Object.keys(obj)) {
+        strMap.set(k, obj[k]);
+      }
+      return strMap;
     }
   },
   watch: {
     historyChangeFlag: {
       handler(newVal) {
+        // 只运行一次
+        if (this.once) {
+          this.once = false
+          if (this.historyProp === undefined) return
+          if (!this.historyProp.get && typeof this.historyProp === 'object') {
+            this.history = this.objToStrMap(this.historyProp)
+          } else {
+            this.history = this.historyProp
+          }
+        }
         let arr1 = []
         let arr2 = []
         let arr3 = []
@@ -438,24 +474,39 @@ export default {
     }
   },
   mounted() {
-    let compareArr = []
-    this.teethInfo.forEach((i) => {
-      if (i.name.length > 2 ) {
-        compareArr.push(i.location + '<' + i.name + '>')
-      } else {
-        compareArr.push(i.location + i.name)
-      }
-    })
-    console.log(compareArr)
     // 从后台获取数值
-    let test = new Map().set('d1','').set('d2','').set('e<1|1>','')
-    this.history = test
-    for(let i = 0; i < compareArr.length; i++) {
-      if (test.get(compareArr[i]) !== undefined) {
-        console.log(i)
-        this.teethInfo[i]['chosen'] = true
+    // 将对象转化为Map
+
+    let historyPropBackup
+    if (this.historyProp && !this.historyProp.get && typeof this.historyProp === 'object') {
+      historyPropBackup = this.objToStrMap(this.historyProp)
+    } else if (this.historyProp) {
+      historyPropBackup = this.historyProp
+    } else {
+      historyPropBackup = new Map()
+    }
+    this.history = historyPropBackup
+    // const historyPropBackup = this.historyProp
+    if (historyPropBackup) {
+      let compareArr = []
+      this.teethInfo.forEach((i) => {
+        if (i.name.length > 2 ) {
+          compareArr.push(i.location + '<' + i.name + '>')
+        } else {
+          compareArr.push(i.location + i.name)
+        }
+      })
+      console.log(compareArr)
+
+      this.history = historyPropBackup
+      for(let i = 0; i < compareArr.length; i++) {
+        if (historyPropBackup.get(compareArr[i]) !== undefined) {
+          this.historyChangeFlag = !this.historyChangeFlag
+          this.teethInfo[i]['chosen'] = true
+        }
       }
     }
+
   },
 }
 </script>
@@ -544,7 +595,9 @@ export default {
   #close {
     position: absolute;
     font-size: 20px;
-    right: 15px;
+    width: 30px;
+    text-align: center;
+    right: 10px;
     top: 10px;
     color: #888888;
     &:hover {
