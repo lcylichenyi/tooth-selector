@@ -1,17 +1,27 @@
 <template>
   <div style="z-index:5;position: relative">
-    <div class="btn">
+    <!-- <div class="btn" @click="showContainer = !showContainer">
       <ul class="clearfix">
-        <li>{{aString}}</li>
-        <li>{{bString}}</li>
+        <li><p>{{aString}}</p></li><li><p>{{bString}}</p></li>
       </ul> 
       <ul class="clearfix">
-        <li>{{cString}}</li>
-        <li>{{dString}}</li>
+        <li><p>{{cString}}</p></li><li><p>{{dString}}</p></li>
       </ul>
 
+    </div> -->
+    <div class="btn-container">
+      <p v-html="eString"></p>
+      <table @click="showContainer = !showContainer" class="btn">
+        <tr>
+          <td v-html="aString"></td><td v-html="bString"></td>
+        </tr>
+        <tr>
+          <td v-html="cString"></td><td v-html="dString"></td>
+        </tr>
+      </table>
+      <p v-html="fString"></p>
     </div>
-    <div ref="sel" class="container">
+    <div ref="sel" class="container" v-if="showContainer">
       <div class="header">
         <input type="button" value="清空" @click="clear" />
         <input type="button" value="全口" :class="{'active': allTeeth}" @click="allTeethChosen" />
@@ -96,7 +106,7 @@
           <input type="button"  class="right-box" v-for="i in locationInfo" :key="i.name" :value="i.name" @click="chooseLocation($event,i.id)" :class="{'active': locationInfo[i.id - 1]['chosen'] === true}" :title="i.title" />
         </div>
       </div>
-      <div id="close">x</div>
+      <div id="close" @click="showContainer = !showContainer">x</div>
       <slot></slot>
     </div>
   </div>
@@ -182,6 +192,8 @@ export default {
         {'name': 'P', 'id': 8, 'chosen': false, 'title': '腭侧'},
       ], 
       intervalId: [1, 2, 3, 4, 5, 6, 7, 16, 17, 18, 19, 20, 21, 22, 39, 40, 41, 42, 43, 44, 45, 54, 55, 56, 57, 58, 59, 60, 61, 62],
+      titleI: [13, 14, 15, 23, 24, 25, 36, 37, 38, 46, 47, 48],
+      titleO: [8, 9, 10, 11, 12, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 49, 50, 51, 52, 53],
       allTeeth: false,
       topHalfTeeth: false,
       bottomHalfTeeth: false,
@@ -195,6 +207,9 @@ export default {
       bString: '',
       cString: '',
       dString: '',
+      eString: '',
+      fString: '',
+      showContainer: false,
     }
   },
   computed: {
@@ -237,6 +252,7 @@ export default {
       this.updateHistory(name, flag)
       this.clearLocation()
       this.changeHistoryChangeFlag()
+      this.changeTitle(id, flag)
       if (this.intervalId.includes(id)) {
         this.hideCordinate()
         return
@@ -369,38 +385,76 @@ export default {
     },
     changeHistoryChangeFlag () {
       this.historyChangeFlag = !this.historyChangeFlag
+    },
+    changeTitle (id, flag) {
+      if (flag) {
+        if (this.titleI.includes(id)) {
+          this.locationInfo[4] = {'name': 'I', 'id': 5, 'chosen': false, 'title': '切缘'}
+        } else if (this.titleO.includes(id)) {
+          this.locationInfo[4] = {'name': 'O', 'id': 5, 'chosen': false, 'title': '颌面'}
+        } else {
+          this.locationInfo[4] = {'name': 'O/I', 'id': 5, 'chosen': false, 'title': '颌面/切缘'}
+        }
+      } else {
+        this.locationInfo[4] = {'name': 'O/I', 'id': 5, 'chosen': false, 'title': '颌面/切缘'}
+      }
     }
   },
   watch: {
     historyChangeFlag: {
       handler(newVal) {
-        console.log('aaa')
         let arr1 = []
         let arr2 = []
         let arr3 = []
         let arr4 = []
-        this.aString = this.bString = this.cString = this.dString = ''
+        this.aString = this.bString = this.cString = this.dString = this.eString = this.fString = ''
         this.history.forEach((val,key) => 
         {
           if (key.includes('a')) {
-            arr1.push(key + '' + val)
-            this.aString = arr1.join('').replace(/a/g, '')
+            arr1.push(key + '<sup>' + val + '</sup>')
+            this.aString = arr1.join(',').replace(/a/g, '')
           }
           if (key.includes('b')) {
-            arr2.push(key + '' + val)
-            this.bString = arr2.join('').replace(/b/g, '')
+            arr2.push(key + '<sup>' + val + '</sup>')
+            this.bString = arr2.join(',').replace(/b/g, '')
           }
           if (key.includes('c')) {
-            arr3.push(key + '' + val)
-            this.cString = arr3.join('').replace(/c/g, '')
+            arr3.push(key + '<sup>' + val + '</sup>')
+            this.cString = arr3.join(',').replace(/c/g, '')
           }
           if (key.includes('d')) {
-            arr4.push(key + '' + val)
-            this.dString = arr4.join('').replace(/d/g, '')
+            arr4.push(key + '<sup>' + val + '</sup>')
+            this.dString = arr4.join(',').replace(/d/g, '')
+          }
+          if (key.includes('e')) {
+            this.eString = '<1|1>'
+          }
+          if (key.includes('f')) {
+            this.fString = '<1|1>'
           }
         })
       },
       immediate: true
+    }
+  },
+  mounted() {
+    let compareArr = []
+    this.teethInfo.forEach((i) => {
+      if (i.name.length > 2 ) {
+        compareArr.push(i.location + '<' + i.name + '>')
+      } else {
+        compareArr.push(i.location + i.name)
+      }
+    })
+    console.log(compareArr)
+    // 从后台获取数值
+    let test = new Map().set('d1','').set('d2','').set('e<1|1>','')
+    this.history = test
+    for(let i = 0; i < compareArr.length; i++) {
+      if (test.get(compareArr[i]) !== undefined) {
+        console.log(i)
+        this.teethInfo[i]['chosen'] = true
+      }
     }
   },
 }
@@ -418,7 +472,7 @@ export default {
   .clearfix {
     *zoom:1;
   }
-  li {
+  li, td, tr {
     margin: 0;
     padding: 0;
   }
@@ -511,6 +565,7 @@ export default {
   
   .container {
     // left: 25px;
+    background-color: white;
     box-sizing: border-box;
     width: 896px;
     height: 255px;
@@ -519,8 +574,9 @@ export default {
     border-radius: 5px;
     box-shadow: 0px 2px 5px #888888;
     position: absolute;
-    left: 150px;
-    top: 150px;
+    left: 4px;
+    top: 100px;
+    z-index: 5;
       & > .header {
         margin-top: 10px;
         margin-left: 166px;
@@ -713,34 +769,56 @@ export default {
   }
 
   .btn {
-    width: 200px;
-    background-color: pink;
-    & ul {
-      & li {
-        word-break: break-all;
-        list-style: none;
-        box-sizing: border-box;
-        width: 50%;
-        float: left;
-        min-height: 30px
-      }
+    font-size: 12px;
+    border-collapse: collapse;
+    width: 210px;
+    min-height: 60px;
+    & tr {
+      height: 30px;
+      min-height: 30px;
+      word-break: break-all;
       &:first-child {
         border-bottom: 1px solid #5F5F5F;
-        li {
+      }
+      & td {
+        box-sizing: border-box;
+        width: 50%;
+        max-width: 50%;
+      }
+      &:first-child {
+        td {
           &:first-child {
+            padding-right: 5px;
             border-right: 1px solid #5F5F5F;
             text-align: right;
+          }
+          &:last-child {
+            padding-left: 5px;
           }
         }
       }
       &:last-child {
-        li {
+        td {
           &:first-child {
+            padding-right: 5px;
             border-right: 1px solid #5F5F5F;
             text-align: right;
           }
+          &:last-child {
+            padding-left: 5px;
+          }
         }
       }
+    }
+  }
+  
+  .btn-container {
+    cursor: pointer;
+    width: 210px;
+    > p {
+      font-size: 12px;
+      text-align: center;
+      height: 10px;
     }
   }
 

@@ -3,7 +3,7 @@
     <img src="./assets/logo.png">
     <p>12122<sup>aa</sup> </p>
     <input type="button" value="点我" @click="isShow=!isShow">
-    <toothSelector v-show='isShow'/>
+    <toothSelector v-show='isShow' />
     <div>bbb</div>
     <div>ccc</div>
   </div>
