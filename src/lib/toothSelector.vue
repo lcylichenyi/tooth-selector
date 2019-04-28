@@ -1,91 +1,104 @@
 <template>
-  <div ref="sel" class="container">
-    <div class="header">
-      <input type="button" value="清空" @click="clear" />
-      <input type="button" value="全口" :class="{'active': allTeeth}" @click="allTeethChosen" />
-      <input type="button" value="上半口" :class="{'active': topHalfTeeth}" @click="topHalfTeethChosen" />
-      <input type="button" value="下半口" :class="{'active': bottomHalfTeeth}" @click="bottomHalfTeethChosen" />
+  <div style="z-index:5;position: relative">
+    <div class="btn">
+      <ul class="clearfix">
+        <li>{{aString}}</li>
+        <li>{{bString}}</li>
+      </ul> 
+      <ul class="clearfix">
+        <li>{{cString}}</li>
+        <li>{{dString}}</li>
+      </ul>
+
     </div>
-    <div class="body-left">
-      <div class="body-left-1 clearfix">
-        <div class="clearfix" id="body-left-1-line-1">
-          <div class="fl interval" v-for="i in top_left_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
-            <input type="button" class="box" :value="i.name" :id="i.id" />
-          </div>
-          <div class="fl interval" @click="choose($event,61)" :class="{'orange': teethInfo[60]['chosen'] === true}">
-            <input type="button" class="box interval-middle" :value="top_center[0].name" :id="top_center[0].id" />
-          </div>
-          <div class="fl interval" v-for="i in top_right_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id-1]['chosen'] === true}">
-            <input type="button" class="box" :value="i.name" :id="i.id" />
-          </div>
-          <br />
-          <br />
+    <div ref="sel" class="container">
+      <div class="header">
+        <input type="button" value="清空" @click="clear" />
+        <input type="button" value="全口" :class="{'active': allTeeth}" @click="allTeethChosen" />
+        <input type="button" value="上半口" :class="{'active': topHalfTeeth}" @click="topHalfTeethChosen" />
+        <input type="button" value="下半口" :class="{'active': bottomHalfTeeth}" @click="bottomHalfTeethChosen" />
+      </div>
+      <div class="body-left">
+        <div class="body-left-1 clearfix">
+          <div class="clearfix" id="body-left-1-line-1">
+            <div class="fl interval" v-for="i in top_left_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+              <input type="button" class="box" :value="i.name" :id="i.id" />
+            </div>
+            <div class="fl interval" @click="choose($event,61)" :class="{'orange': teethInfo[60]['chosen'] === true}">
+              <input type="button" class="box interval-middle" :value="top_center[0].name" :id="top_center[0].id" />
+            </div>
+            <div class="fl interval" v-for="i in top_right_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id-1]['chosen'] === true}">
+              <input type="button" class="box" :value="i.name" :id="i.id" />
+            </div>
+            <br />
+            <br />
 
 
-        </div>
-        <div class="clearfix" id="body-left-1-line-2">
-          <div class="fl tooth" v-for="i in top_left_2" :key="i.id"  @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
-            <input type="button" class="box" :value="i.name" :id="i.id" />
           </div>
-          <div class="y-line"></div>
-          <div class="fl tooth" v-for="i in top_right_2" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
-            <input type="button" class="box" :value="i.name" :id="i.id" />
-          </div>
-        </div>
-      </div>
-      <div class="line"></div>
-      <div class="body-left-2 clearfix">
-        <div class="clearfix" id="body-left-2-line-1">
-          <div class="fl tooth" v-for="i in bottom_left_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
-            <input type="button" class="box" :value="i.name" :id="i.id" />
-          </div>
-          <div class="y-line"></div>
-          <div class="fl tooth" v-for="i in bottom_right_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
-            <input type="button" class="box" :value="i.name" :id="i.id" />
-          </div>
-          <br />
-          <br />
-        </div>
-        <div class="clearfix" id="body-left-2-line-2">
-          <div class="fl interval" v-for="i in bottom_left_2" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
-            <input type="button" class="box" :value="i.name" :id="i.id" />
-          </div>
-          <div class="fl interval" @click="choose($event,62)" :class="{'orange': teethInfo[61]['chosen'] === true}">
-            <input type="button" class="box interval-middle" :value="bottom_center[0].name" :id="bottom_center[0].id" />
-          </div>
-          <div class="fl interval" v-for="i in bottom_right_2" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
-            <input type="button" class="box" :value="i.name" :id="i.id" />
+          <div class="clearfix" id="body-left-1-line-2">
+            <div class="fl tooth" v-for="i in top_left_2" :key="i.id"  @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+              <input type="button" class="box" :value="i.name" :id="i.id" />
+            </div>
+            <div class="y-line"></div>
+            <div class="fl tooth" v-for="i in top_right_2" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+              <input type="button" class="box" :value="i.name" :id="i.id" />
+            </div>
           </div>
         </div>
+        <div class="line"></div>
+        <div class="body-left-2 clearfix">
+          <div class="clearfix" id="body-left-2-line-1">
+            <div class="fl tooth" v-for="i in bottom_left_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+              <input type="button" class="box" :value="i.name" :id="i.id" />
+            </div>
+            <div class="y-line"></div>
+            <div class="fl tooth" v-for="i in bottom_right_1" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+              <input type="button" class="box" :value="i.name" :id="i.id" />
+            </div>
+            <br />
+            <br />
+          </div>
+          <div class="clearfix" id="body-left-2-line-2">
+            <div class="fl interval" v-for="i in bottom_left_2" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+              <input type="button" class="box" :value="i.name" :id="i.id" />
+            </div>
+            <div class="fl interval" @click="choose($event,62)" :class="{'orange': teethInfo[61]['chosen'] === true}">
+              <input type="button" class="box interval-middle" :value="bottom_center[0].name" :id="bottom_center[0].id" />
+            </div>
+            <div class="fl interval" v-for="i in bottom_right_2" :key="i.id" @click="choose($event,i.id)" :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}">
+              <input type="button" class="box" :value="i.name" :id="i.id" />
+            </div>
+          </div>
 
-      </div>
-    </div>
-    <div class="body-right">
-      <div class="right-header">
-        <div class="right-header-center">
-          <ul>
-            <li>{{a}}</li><li>{{b}}</li>
-          </ul>
-          <ul>
-            <li>{{c}}</li><li>{{d}}</li>
-          </ul>
         </div>
       </div>
-      <div class="right-line"></div>
-      <div class="right-body">
-        <!-- <input class="right-box active" type="button" value="La" />
-        <input class="right-box" type="button" value="B" />
-        <input class="right-box" type="button" value="F" />
-        <input class="right-box" type="button" value="M" />
-        <input class="right-box" type="button" value="O" />
-        <input class="right-box" type="button" value="D" />
-        <input class="right-box" type="button" value="L" />
-        <input class="right-box" type="button" value="P" /> -->
-        <input type="button"  class="right-box" v-for="i in locationInfo" :key="i.name" :value="i.name" @click="chooseLocation($event,i.id)" :class="{'active': locationInfo[i.id - 1]['chosen'] === true}" :title="i.title" />
+      <div class="body-right">
+        <div class="right-header">
+          <div class="right-header-center">
+            <ul>
+              <li>{{a}}</li><li>{{b}}</li>
+            </ul>
+            <ul>
+              <li>{{c}}</li><li>{{d}}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="right-line"></div>
+        <div class="right-body">
+          <!-- <input class="right-box active" type="button" value="La" />
+          <input class="right-box" type="button" value="B" />
+          <input class="right-box" type="button" value="F" />
+          <input class="right-box" type="button" value="M" />
+          <input class="right-box" type="button" value="O" />
+          <input class="right-box" type="button" value="D" />
+          <input class="right-box" type="button" value="L" />
+          <input class="right-box" type="button" value="P" /> -->
+          <input type="button"  class="right-box" v-for="i in locationInfo" :key="i.name" :value="i.name" @click="chooseLocation($event,i.id)" :class="{'active': locationInfo[i.id - 1]['chosen'] === true}" :title="i.title" />
+        </div>
       </div>
+      <div id="close">x</div>
+      <slot></slot>
     </div>
-    <div id="close">x</div>
-    <slot></slot>
   </div>
 </template>
 
@@ -172,12 +185,16 @@ export default {
       allTeeth: false,
       topHalfTeeth: false,
       bottomHalfTeeth: false,
-      isChosen: true,
       history: new Map(),
-      a: null,
-      b: null,
-      c: null,
-      d: null,
+      a: '',
+      b: '',
+      c: '',
+      d: '',
+      historyChangeFlag: true,
+      aString: '',
+      bString: '',
+      cString: '',
+      dString: '',
     }
   },
   computed: {
@@ -210,8 +227,7 @@ export default {
     },
     bottom_center() {
       return this.teethInfo.filter(i => i.id === 62)
-    }
-    
+    },
   },
   methods: {
     choose (e, id) {
@@ -220,18 +236,20 @@ export default {
       name = this.teethInfo[id - 1]['location'] + name
       this.updateHistory(name, flag)
       this.clearLocation()
+      this.changeHistoryChangeFlag()
       if (this.intervalId.includes(id)) {
+        this.hideCordinate()
         return
       }
       this.displayCordinate(name, flag)
     },
     chooseLocation (e, id) {
-      console.log(this.history)
+      this.changeHistoryChangeFlag()
       if (this.history.size !== 0) {
         const lastKey = [...this.history.keys()].pop()
         if (lastKey.length < 3) {
           let lastValue = [...this.history.values()].pop()
-          lastValue = lastValue === null ? '' : lastValue
+          lastValue = lastValue === '' ? '' : lastValue
           const flag = this.locationInfo[id - 1]['chosen'] = !this.locationInfo[id - 1]['chosen']
           const name = this.locationInfo[id - 1]['name']
           this.updateLocation(lastKey, lastValue, name, flag)
@@ -240,6 +258,7 @@ export default {
       }
     },
     allTeethChosen () {
+      this.changeHistoryChangeFlag()
       this.allTeeth = !this.allTeeth
       this.teethInfo.map(i => { 
         if (i.id >= 8 && i.id <= 15 || i.id >= 23 && i.id <= 30) { 
@@ -267,6 +286,7 @@ export default {
       this.bottomHalfTeeth = this.allTeeth
     },
     topHalfTeethChosen () {
+      this.changeHistoryChangeFlag()
       this.topHalfTeeth = !this.topHalfTeeth
       this.teethInfo.map(i => { if (i.id >= 8 && i.id <= 15 || i.id >= 23 && i.id <= 30) i.chosen = this.topHalfTeeth })
       this.teethInfo.map(i => { 
@@ -279,6 +299,7 @@ export default {
       this.hideCordinate()
     },
     bottomHalfTeethChosen () {
+      this.changeHistoryChangeFlag()
       this.bottomHalfTeeth = !this.bottomHalfTeeth
       this.teethInfo.map(i => { if (i.id >= 31 && i.id <= 38 || i.id >= 46 && i.id <= 53) i.chosen = this.bottomHalfTeeth })
       this.teethInfo.map(i => { 
@@ -298,10 +319,11 @@ export default {
       this.clearHistory()
       this.clearLocation()
       this.hideCordinate()
+      this.changeHistoryChangeFlag()
     },
     updateHistory (data, flag = true) {
       if (flag) {
-        this.history.set(data, null)
+        this.history.set(data, '')
       } else {
         this.history.delete(data)
       }
@@ -344,8 +366,43 @@ export default {
     },
     hideCordinate () {
       this.a = this.b = this.c = this.d = ''
+    },
+    changeHistoryChangeFlag () {
+      this.historyChangeFlag = !this.historyChangeFlag
     }
-  }
+  },
+  watch: {
+    historyChangeFlag: {
+      handler(newVal) {
+        console.log('aaa')
+        let arr1 = []
+        let arr2 = []
+        let arr3 = []
+        let arr4 = []
+        this.aString = this.bString = this.cString = this.dString = ''
+        this.history.forEach((val,key) => 
+        {
+          if (key.includes('a')) {
+            arr1.push(key + '' + val)
+            this.aString = arr1.join('').replace(/a/g, '')
+          }
+          if (key.includes('b')) {
+            arr2.push(key + '' + val)
+            this.bString = arr2.join('').replace(/b/g, '')
+          }
+          if (key.includes('c')) {
+            arr3.push(key + '' + val)
+            this.cString = arr3.join('').replace(/c/g, '')
+          }
+          if (key.includes('d')) {
+            arr4.push(key + '' + val)
+            this.dString = arr4.join('').replace(/d/g, '')
+          }
+        })
+      },
+      immediate: true
+    }
+  },
 }
 </script>
 
@@ -462,6 +519,8 @@ export default {
     border-radius: 5px;
     box-shadow: 0px 2px 5px #888888;
     position: absolute;
+    left: 150px;
+    top: 150px;
       & > .header {
         margin-top: 10px;
         margin-left: 166px;
@@ -650,6 +709,38 @@ export default {
       border-top : 1px solid #D8DCE6;
       border-left: 1px solid #D8DCE6;
       box-shadow: -1px -1px 1px -1px  #888888;
+    }
+  }
+
+  .btn {
+    width: 200px;
+    background-color: pink;
+    & ul {
+      & li {
+        word-break: break-all;
+        list-style: none;
+        box-sizing: border-box;
+        width: 50%;
+        float: left;
+        min-height: 30px
+      }
+      &:first-child {
+        border-bottom: 1px solid #5F5F5F;
+        li {
+          &:first-child {
+            border-right: 1px solid #5F5F5F;
+            text-align: right;
+          }
+        }
+      }
+      &:last-child {
+        li {
+          &:first-child {
+            border-right: 1px solid #5F5F5F;
+            text-align: right;
+          }
+        }
+      }
     }
   }
 
