@@ -4,7 +4,7 @@
 >
 > 
 
-![1556503022365](.\src\assets\1556503022365.png)
+![1556503022365](https://github.com/lcylichenyi/tooth-selector/blob/test/src/assets/1556503022365.png?raw=true)
 
 父组件接收传出值： v-model = ""
 
@@ -23,7 +23,7 @@ test: {'d1': 'LaD', 'd2': '', 'a1': 'P', 'a4': 'F', 'b2': '', 'c4': ''}
 
 
 
-![1556503330447](.\src\assets\1556503330447.png)
+![1556503330447](https://github.com/lcylichenyi/tooth-selector/blob/test/src/assets/1556503330447.png?raw=true)
 
 ## Build Setup
 
