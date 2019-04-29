@@ -3,6 +3,7 @@
   "description": "used to select tooth",
   "version": "1.0.0",
   "author": "lcylichenyi <289172988@qq.com>",
+  "main": "./src/lib/index.js",
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
