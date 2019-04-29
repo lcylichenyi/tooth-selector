@@ -506,8 +506,6 @@ export default {
       historyPropBackup = new Map()
     }
     this.history = historyPropBackup
-    // const historyPropBackup = this.historyProp
-    // this.toFather(this.history)
     if (historyPropBackup) {
       let compareArr = []
       this.teethInfo.forEach((i) => {
@@ -527,7 +525,6 @@ export default {
         }
       }
     }
-    // this.toFather(this.history)
 
   },
 }
