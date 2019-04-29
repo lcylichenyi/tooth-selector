@@ -338,7 +338,7 @@ export default {
       } else {
         this.history.delete(data)
       }
-      console.log(this.history)
+      // console.log(this.history)
 
     },
     clearHistory () {
@@ -353,7 +353,7 @@ export default {
         loc = oldLocation.replace(newLocation, '')
         this.history.set(lastKey, loc)
       }
-      console.log(this.history)
+      // console.log(this.history)
     },
     clearLocation () {
       this.locationInfo.map(i => i.chosen = false)
@@ -393,7 +393,7 @@ export default {
         }
       } else {
         let lastKey = [...this.history.keys()].pop()
-        if (lastKey.length < 3) {
+        if (lastKey && lastKey.length < 3) {
           let num = lastKey.slice(1)
           if (num <= 3) {
             this.locationInfo[4] = {'name': 'I', 'id': 5, 'chosen': false, 'title': '切缘'}
@@ -422,8 +422,7 @@ export default {
     toFather (history) {
       // 触发v-model
       if (typeof history === 'object') {
-        console.log(this.strMapToObj(history))
-        console.log('aaa')
+        // console.log(this.strMapToObj(history))
         this.$emit('input', this.strMapToObj(history))
       }
     }
@@ -498,7 +497,7 @@ export default {
           compareArr.push(i.location + i.name)
         }
       })
-      console.log(compareArr)
+      // console.log(compareArr)
 
       this.history = historyPropBackup
       for(let i = 0; i < compareArr.length; i++) {
