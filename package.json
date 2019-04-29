@@ -1,7 +1,7 @@
 {
   "name": "tooth-selector",
   "description": "used to select tooth",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "lcylichenyi <289172988@qq.com>",
   "main": "./src/lib/index.js",
   "license": "MIT",

@@ -1,5 +1,7 @@
 # tooth-selector
 
+> github : https://github.com/lcylichenyi/tooth-selector
+
 > used to select tooth（牙位选择器）
 >
 > 
