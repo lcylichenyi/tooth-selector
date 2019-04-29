@@ -338,7 +338,6 @@ export default {
       } else {
         this.history.delete(data)
       }
-      // console.log(this.history)
 
     },
     clearHistory () {
@@ -353,7 +352,6 @@ export default {
         loc = oldLocation.replace(newLocation, '')
         this.history.set(lastKey, loc)
       }
-      // console.log(this.history)
     },
     clearLocation () {
       this.locationInfo.map(i => i.chosen = false)
@@ -422,7 +420,6 @@ export default {
     toFather (history) {
       // 触发v-model
       if (typeof history === 'object') {
-        // console.log(this.strMapToObj(history))
         this.$emit('input', this.strMapToObj(history))
       }
     }
@@ -497,7 +494,6 @@ export default {
           compareArr.push(i.location + i.name)
         }
       })
-      // console.log(compareArr)
 
       this.history = historyPropBackup
       for(let i = 0; i < compareArr.length; i++) {
@@ -848,6 +844,7 @@ export default {
           }
           &:last-child {
             padding-left: 5px;
+            text-align: left;
           }
         }
       }
@@ -860,6 +857,7 @@ export default {
           }
           &:last-child {
             padding-left: 5px;
+            text-align: left;
           }
         }
       }
