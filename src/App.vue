@@ -8,10 +8,10 @@
     <input type="button" value="点我" @click="isShow=!isShow">
     <!-- <toothSelector v-show='isShow' :historyProp=test  v-model='teeth'/> -->
     <toothSelector v-show='isShow' />
-    <div>其{{teeth}}</div>
+    <!-- <div>其{{teeth}}</div>
     <div>其他的文章内容容容</div>
     <div>其他的文章内容容容</div>
-    <div>其他的文章内容容容</div>
+    <div>其他的文章内容容容</div> -->
   </div>
 </template>
 
