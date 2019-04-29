@@ -218,6 +218,10 @@ export default {
     historyProp: {
       type: Object,
       default: () => {}
+    },
+    value: {
+      type: Object,
+      default: () => {}
     }
   },
   computed: {
@@ -424,6 +428,21 @@ export default {
         strMap.set(k, obj[k]);
       }
       return strMap;
+    },
+    strMapToObj (strMap) {
+      let obj = {};
+      for (let [k,v] of strMap) {
+        obj[k] = v;
+      }
+      return obj;
+    },
+    toFather (history) {
+      // 触发v-model
+      if (typeof history === 'object') {
+        console.log(this.strMapToObj(history))
+        console.log('aaa')
+        this.$emit('input', this.strMapToObj(history))
+      }
     }
   },
   watch: {
@@ -469,6 +488,7 @@ export default {
             this.fString = '<1|1>'
           }
         })
+        this.toFather(this.history)
       },
       immediate: true
     }
@@ -487,6 +507,7 @@ export default {
     }
     this.history = historyPropBackup
     // const historyPropBackup = this.historyProp
+    // this.toFather(this.history)
     if (historyPropBackup) {
       let compareArr = []
       this.teethInfo.forEach((i) => {
@@ -506,6 +527,7 @@ export default {
         }
       }
     }
+    // this.toFather(this.history)
 
   },
 }
@@ -628,7 +650,7 @@ export default {
     box-shadow: 0px 2px 5px #888888;
     position: absolute;
     left: 4px;
-    top: 100px;
+    top: 130px;
     z-index: 5;
       & > .header {
         margin-top: 10px;
