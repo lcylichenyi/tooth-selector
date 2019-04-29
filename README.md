@@ -2,9 +2,9 @@
 
 > used to select tooth（牙位选择器）
 >
-> ![1556503022365](C:\Users\dell\AppData\Roaming\Typora\typora-user-images\1556503022365.png)
+> 
 
-
+![1556503022365](.\src\assets\1556503022365.png)
 
 父组件接收传出值： v-model = ""
 
@@ -23,7 +23,7 @@ test: {'d1': 'LaD', 'd2': '', 'a1': 'P', 'a4': 'F', 'b2': '', 'c4': ''}
 
 
 
-![1556503330447](C:\Users\dell\AppData\Roaming\Typora\typora-user-images\1556503330447.png)
+![1556503330447](.\src\assets\1556503330447.png)
 
 ## Build Setup
 
