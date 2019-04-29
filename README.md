@@ -8,6 +8,26 @@
 
 ![1556503022365](https://github.com/lcylichenyi/tooth-selector/blob/test/src/assets/1556503022365.png?raw=true)
 
+
+
+使用方法： 
+
+```javascript
+import toothSelector from 'toothSelector'
+
+
+export default {
+  components: {
+    toothSelector
+  }
+}
+
+```
+
+
+
+
+
 父组件接收传出值： v-model = ""
 
 父组件传入值： historyProp

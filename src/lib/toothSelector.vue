@@ -1,14 +1,5 @@
 <template>
   <div style="z-index:5;position: relative">
-    <!-- <div class="btn" @click="showContainer = !showContainer">
-      <ul class="clearfix">
-        <li><p>{{aString}}</p></li><li><p>{{bString}}</p></li>
-      </ul> 
-      <ul class="clearfix">
-        <li><p>{{cString}}</p></li><li><p>{{dString}}</p></li>
-      </ul>
-
-    </div> -->
     <div class="btn-container">
       <p v-html="eString"></p>
       <table @click="showContainer = !showContainer" class="btn">
@@ -95,14 +86,6 @@
         </div>
         <div class="right-line"></div>
         <div class="right-body">
-          <!-- <input class="right-box active" type="button" value="La" />
-          <input class="right-box" type="button" value="B" />
-          <input class="right-box" type="button" value="F" />
-          <input class="right-box" type="button" value="M" />
-          <input class="right-box" type="button" value="O" />
-          <input class="right-box" type="button" value="D" />
-          <input class="right-box" type="button" value="L" />
-          <input class="right-box" type="button" value="P" /> -->
           <input type="button"  class="right-box" v-for="i in locationInfo" :key="i.name" :value="i.name" @click="chooseLocation($event,i.id)" :class="{'active': locationInfo[i.id - 1]['chosen'] === true}" :title="i.title" />
         </div>
       </div>
