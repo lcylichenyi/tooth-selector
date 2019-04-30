@@ -68,7 +68,7 @@ describe('tooth-selector test', async function () {
       return document.querySelector(sel).innerHTML
     }, '.btn td')
     await browser.close()
-    expect(target).to.equal('8<sup>L</sup>,&lt;8|7&gt;<sup></sup>')
+    expect(target).to.equal('<spn>1<sup>P</sup></spn>,<spn>4<sup>F</sup></spn>,<spn>8<sup>L</sup></spn>,<spn>&lt;8|7&gt;<sup></sup></spn>')
   })
   it('Tooth gap cannot select tooth position', async function () {
     
