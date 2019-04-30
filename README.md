@@ -40,7 +40,7 @@ export default {
 
 
 // 属性
-test: {'d1': 'LaD', 'd2': '', 'a1': 'P', 'a4': 'F', 'b2': '', 'c4': '',"d<6|7>": ""}
+test: { "d1": [ "La", "D" ], "d2": [], "a1": [ "P" ], "a4": [ "F" ], "d<6|7>": [ "" ] }
 ```
 
 传入传出值key是由 位置信息 + 牙齿信息 组成， value 表示 附带属性。(牙缝不允许有value)
@@ -64,6 +64,12 @@ npm run dev
 
 # build for production with minification
 npm run build
+
+# test
+npm run test
 ```
 
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+
+

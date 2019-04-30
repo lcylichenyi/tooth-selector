@@ -349,7 +349,13 @@ export default {
         loc = oldLocation + newLocation
         this.history.set(lastKey, loc)
       } else {
-        loc = oldLocation.replace(newLocation, '')
+        if (newLocation === 'L') {
+          let temp = oldLocation.replace('La', '!')
+          console.log(temp)
+          loc = temp.replace(newLocation, '').replace('!', 'La')
+        } else {
+          loc = oldLocation.replace(newLocation, '')
+        }
         this.history.set(lastKey, loc)
       }
     },
@@ -410,17 +416,43 @@ export default {
       }
       return strMap;
     },
-    strMapToObj (strMap) {
+    strMapToOutput (strMap) {
       let obj = {};
       for (let [k,v] of strMap) {
-        obj[k] = v;
+        obj[k] = this.outputStringtoArray(v);
       }
       return obj;
+    },
+    inputArraytoString (obj) {
+      const newObj = {}
+      for (let i in obj) {
+        newObj[i] = obj[i].join('')
+      }
+      return newObj
+    },
+    outputStringtoArray (val) {
+      let str = ''
+      let arr = []
+      if (val) {
+        for(let i=0; i<val.length; i++) {
+          if(val[i] === 'L' && val[i+1] === 'a' ) {
+            str += val[i]
+            continue
+          }
+          str += val[i] + ','
+        }
+      }
+      arr = str.split(',')
+      if(arr[arr.length - 1] === '') {
+        arr.pop()
+      }
+      return arr
     },
     toFather (history) {
       // 触发v-model
       if (typeof history === 'object') {
-        this.$emit('input', this.strMapToObj(history))
+        const output = this.strMapToOutput(history)
+        this.$emit('input', output)
       }
     }
   },
@@ -431,7 +463,7 @@ export default {
         if (this.once) {
           this.once = false
           if (this.historyProp === undefined) return
-          if (!this.historyProp.get && typeof this.historyProp === 'object') {
+          if (!this.historyProp['get'] && typeof this.historyProp === 'object') {
             this.history = this.objToStrMap(this.historyProp)
           } else {
             this.history = this.historyProp
@@ -445,19 +477,19 @@ export default {
         this.history.forEach((val,key) => 
         {
           if (key.includes('a')) {
-            arr1.push(key + '<sup>' + val + '</sup>')
+            arr1.push(`<span>${key}<sup>${val}</sup></span>`)
             this.aString = arr1.join(',').replace(/a/g, '')
           }
           if (key.includes('b')) {
-            arr2.push(key + '<sup>' + val + '</sup>')
+            arr2.push(`<span>${key}<sup>${val}</sup></span>`)
             this.bString = arr2.join(',').replace(/b/g, '')
           }
           if (key.includes('c')) {
-            arr3.push(key + '<sup>' + val + '</sup>')
+            arr3.push(`<span>${key}<sup>${val}</sup></span>`)
             this.cString = arr3.join(',').replace(/c/g, '')
           }
           if (key.includes('d')) {
-            arr4.push(key + '<sup>' + val + '</sup>')
+            arr4.push(`<span>${key}<sup>${val}</sup></span>`)
             this.dString = arr4.join(',').replace(/d/g, '')
           }
           if (key.includes('e')) {
@@ -468,6 +500,7 @@ export default {
           }
         })
         this.toFather(this.history)
+        console.log(this.history)
       },
       immediate: true
     }
@@ -477,13 +510,13 @@ export default {
     // 将对象转化为Map
 
     let historyPropBackup
-    if (this.historyProp && !this.historyProp.get && typeof this.historyProp === 'object') {
-      historyPropBackup = this.objToStrMap(this.historyProp)
-    } else if (this.historyProp) {
-      historyPropBackup = this.historyProp
+    if (this.historyProp && typeof this.historyProp === 'object') {
+      historyPropBackup = this.inputArraytoString(this.historyProp)
+      historyPropBackup = this.objToStrMap(historyPropBackup)
     } else {
       historyPropBackup = new Map()
     }
+    
     this.history = historyPropBackup
     if (historyPropBackup) {
       let compareArr = []
@@ -826,14 +859,14 @@ export default {
     & tr {
       height: 30px;
       min-height: 30px;
-      word-break: break-all;
+      word-break: normal;
       &:first-child {
         border-bottom: 1px solid #5F5F5F;
       }
       & td {
         box-sizing: border-box;
         width: 50%;
-        max-width: 50%;
+        max-width: 105px;
       }
       &:first-child {
         td {
