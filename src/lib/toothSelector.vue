@@ -600,7 +600,7 @@ export default {
       z-index: -1;
       top: -5px;
       width: 2px;
-      left: 5px;
+      left: 5.5px;
       height: 70px;
       position: absolute;
       background-color: #C1C1C1;
