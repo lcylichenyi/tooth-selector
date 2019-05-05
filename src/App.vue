@@ -6,7 +6,7 @@
     <div>其他的文章内容容容</div>
     <div>其他的文章内容容容</div>
     <!-- <input type="button" value="点我" @click="isShow=!isShow"> -->
-    <toothSelector v-show='isShow' :historyProp=test  v-model='teeth'/>
+    <toothSelector :historyProp=test  v-model='teeth'/>
     <!-- <toothSelector v-show='isShow' /> -->
     <div>其{{teeth}}</div>
     <div>其</div>
@@ -34,10 +34,10 @@ export default {
 </script>
 
 <style lang="scss">
-  * {
-    margin: 0;
-    padding: 0;
-  }
+  // * {
+  //   margin: 0;
+  //   padding: 0;
+  // }
   body {
     padding-left: 50px;
   }
