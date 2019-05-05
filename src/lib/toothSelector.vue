@@ -1,5 +1,5 @@
 <template>
-  <div style="z-index:5;position: relative">
+  <div style="position: relative">
     <div class="btn-container">
       <p v-html="eString"></p>
       <table @click="showContainer = !showContainer" class="btn">
@@ -502,6 +502,20 @@ export default {
       },
       immediate: true
     }
+  },
+  beforeMount() {
+    // 在组件外点击会使之消失
+    this._close = e => {    // 如果点击发生在当前组件内部，则不处理
+    if (this.$el.contains(e.target)) {      
+      return
+  } else {
+      this.showContainer = false
+    }
+  }  
+  document.body.addEventListener('click', this._close)
+  },
+  beforeDestroy() {  
+    document.body.removeEventListener('click', this._close)
   },
   mounted() {
     // 从后台获取数值
