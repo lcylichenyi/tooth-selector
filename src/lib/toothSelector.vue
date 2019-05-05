@@ -555,7 +555,12 @@ export default {
     margin: 0;
     padding: 0;
   }
+  // 去除ipad默认样式
+  input[type="button"], input[type="submit"], input[type="reset"] {
+    -webkit-appearance: none;
+  }
   input {
+    text-align: center;
     &:hover {
       cursor: pointer;
     }
@@ -603,8 +608,10 @@ export default {
   }
   .interval {
     margin-right: 10px;
+    text-align: center;
     & > input {
       width: 30px !important;
+      padding: 0;
     }
     &.orange {
       & input {
@@ -619,6 +626,7 @@ export default {
   .interval-middle {
     margin-left: 8px;
     margin-right: 6px;
+    padding: 0;
   }
   #close {
     position: absolute;
