@@ -1,7 +1,7 @@
 {
   "name": "tooth-selector",
   "description": "used to select tooth",
-  "version": "4.3.1",
+  "version": "4.3.2",
   "author": "lcylichenyi <289172988@qq.com>",
   "main": "/dist/toothSelector.min.js",
   "license": "MIT",
