@@ -11,6 +11,7 @@
     <div>其{{teeth}}</div>
     <div>其</div>
     <div>其他的文章内容容容</div>
+    <button @click="fucking">清空</button>
     <div>其他的文章内容容容</div>
   </div>
 </template>
@@ -30,6 +31,11 @@ export default {
       teeth: {}
     }
   },
+  methods: {
+    fucking () {
+      this.teeth = {}
+    }
+  }
 }
 </script>
 

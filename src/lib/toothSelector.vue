@@ -236,7 +236,9 @@
             @click="chooseLocation($event,i.id)"
             :class="{'active': locationInfo[i.id - 1]['chosen'] === true}"
             :title="i.title"
+            v-show="!isInterval && rightShown"
           >
+          <input type="text" id="number" ref="number" v-model="teethIntervalNum" v-show="isInterval && rightShown" />
         </div>
       </div>
       <div
@@ -255,6 +257,8 @@ export default {
   name: 'ToothSelector',
   data () {
     return {
+      isInterval: false,
+      rightShown: false,
       teethInfo: [
         { 'name': '8|7', 'chosen': false, 'id': 1, 'location': 'a' },
         { 'name': '7|6', 'chosen': false, 'id': 2, 'location': 'a' },
@@ -349,7 +353,8 @@ export default {
       eString: '',
       fString: '',
       showContainer: false,
-      once: true
+      once: true,
+      teethIntervalNum: null,
     }
   },
   props: {
@@ -397,6 +402,15 @@ export default {
   methods: {
     choose (e, id) {
       const flag = this.teethInfo[id - 1]['chosen'] = !this.teethInfo[id - 1]['chosen']
+      // console.log(this.$refs, this.$refs.number)
+      this.$nextTick(() => {
+          this.$refs.number.focus()
+        })
+      if(!flag) {
+        this.rightShown = false
+      } else {
+        this.rightShown = true
+      }
       let name = this.teethInfo[id - 1]['name'].length < 2 ? this.teethInfo[id - 1]['name'] : '<' + this.teethInfo[id - 1]['name'] + '>'
       name = this.teethInfo[id - 1]['location'] + name
       this.updateHistory(name, flag)
@@ -404,10 +418,16 @@ export default {
       this.changeHistoryChangeFlag()
       this.changeTitle(id, flag)
       if (this.intervalId.includes(id)) {
+        this.isInterval = true
+        this.teethIntervalNum = null
         this.hideCordinate()
         return
+      } else {
+        this.isInterval = false
       }
       this.displayCordinate(name, flag)
+      console.warn(flag)
+      
     },
     chooseLocation (e, id) {
       if (this.history.size !== 0) {
@@ -423,6 +443,7 @@ export default {
       this.changeHistoryChangeFlag()
     },
     allTeethChosen () {
+      this.rightShown = false
       this.allTeeth = !this.allTeeth
       this.teethInfo.map(i => {
         if ((i.id >= 8 && i.id <= 15) || (i.id >= 23 && i.id <= 30)) {
@@ -451,6 +472,7 @@ export default {
       this.changeHistoryChangeFlag()
     },
     topHalfTeethChosen () {
+      this.rightShown = false
       this.topHalfTeeth = !this.topHalfTeeth
       this.teethInfo.map(i => {
         if ((i.id >= 8 && i.id <= 15) || (i.id >= 23 && i.id <= 30)) {
@@ -463,6 +485,7 @@ export default {
       this.changeHistoryChangeFlag()
     },
     bottomHalfTeethChosen () {
+      this.rightShown = false
       this.bottomHalfTeeth = !this.bottomHalfTeeth
       this.teethInfo.map(i => {
         if ((i.id >= 31 && i.id <= 38) || (i.id >= 46 && i.id <= 53)) {
@@ -475,6 +498,7 @@ export default {
       this.changeHistoryChangeFlag()
     },
     clear () {
+      this.rightShown = false
       this.teethInfo.map(i => { i.chosen = false })
       this.allTeeth = false
       this.topHalfTeeth = false
@@ -584,12 +608,16 @@ export default {
       let str = ''
       let arr = []
       if (val) {
-        for (let i = 0; i < val.length; i++) {
-          if (val[i] === 'L' && val[i + 1] === 'a') {
-            str += val[i]
-            continue
+        if(Number.parseInt(val)) {
+          str = val
+        } else {
+          for (let i = 0; i < val.length; i++) {
+            if (val[i] === 'L' && val[i + 1] === 'a') {
+              str += val[i]
+              continue
+            }
+            str += val[i] + ','
           }
-          str += val[i] + ','
         }
       }
       arr = str.split(',')
@@ -607,6 +635,16 @@ export default {
     }
   },
   watch: {
+    teethIntervalNum(val) {
+      if(val !== null) {
+        const lastKey = [...this.history.keys()].pop()
+        if(lastKey && lastKey.length > 3) {
+          this.history.set(lastKey, val)
+        }
+        this.changeHistoryChangeFlag()
+        this.toFather(this.history)
+      }
+    },
     historyChangeFlag: {
       handler (newVal) {
         // 只运行一次
@@ -1075,6 +1113,11 @@ export default {
       text-align: center;
       height: 10px;
     }
+  }
+
+  #number {
+    margin-top: 30px;
+    width: 80px;
   }
 
 </style>
