@@ -6,7 +6,8 @@
     <div>其他的文章内容容容</div>
     <div>其他的文章内容容容</div>
     <!-- <input type="button" value="点我" @click="isShow=!isShow"> -->
-    <toothSelector :historyProp=test  v-model='teeth'/>
+    <toothSelector :historyProp=test  v-model='teeth'  :maskArr="['a1', 'b3', 'c3']" :showContainer="true" />
+    <toothSelector :historyProp=test  v-model='teeth'  :maskArr="['a1', 'b3', 'c3']" :showContainer="true" />
     <!-- <toothSelector v-show='isShow' /> -->
     <div>其{{teeth}}</div>
     <div>其</div>

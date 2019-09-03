@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative">
-    <div class="btn-container">
+    <!-- <div class="btn-container">
       <p v-html="eString" />
       <table
         @click="showContainer = !showContainer"
@@ -14,7 +14,7 @@
         </tr>
       </table>
       <p v-html="fString" />
-    </div>
+    </div> -->
     <div
       ref="sel"
       class="container"
@@ -29,19 +29,22 @@
         <input
           type="button"
           value="全口"
-          :class="{'active': allTeeth}"
+          :class="{'active': allTeeth, 'greyBtn': topMaskFlag}"
+          :disabled=topMaskFlag
           @click="allTeethChosen"
         >
         <input
           type="button"
           value="上半口"
-          :class="{'active': topHalfTeeth}"
+          :class="{'active': topHalfTeeth, 'greyBtn': topMaskFlag}"
+          :disabled=topMaskFlag
           @click="topHalfTeethChosen"
         >
         <input
           type="button"
           value="下半口"
-          :class="{'active': bottomHalfTeeth}"
+          :class="{'active': bottomHalfTeeth, 'greyBtn': topMaskFlag}"
+          :disabled=topMaskFlag
           @click="bottomHalfTeethChosen"
         >
       </div>
@@ -94,6 +97,8 @@
             <br>
             <br>
           </div>
+          <div class="mask" v-if="maskFlag">
+          </div>
           <div
             class="clearfix"
             id="body-left-1-line-2"
@@ -105,6 +110,7 @@
               @click="choose($event,i.id)"
               :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}"
             >
+              <div class="toothMask" @click.stop="tm($event)" v-if="i['masked']"></div>
               <input
                 type="button"
                 class="box"
@@ -120,6 +126,7 @@
               @click="choose($event,i.id)"
               :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}"
             >
+              <div class="toothMask" @click.stop="tm($event)" v-if="i['masked']"></div>
               <input
                 type="button"
                 class="box"
@@ -142,6 +149,7 @@
               @click="choose($event,i.id)"
               :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}"
             >
+              <div class="toothMask" @click.stop="tm($event)" v-if="i['masked']"></div>
               <input
                 type="button"
                 class="box"
@@ -157,6 +165,7 @@
               @click="choose($event,i.id)"
               :class="{'orange': teethInfo[i.id - 1]['chosen'] === true}"
             >
+              <div class="toothMask" @click.stop="tm($event)" v-if="i['masked']"></div>
               <input
                 type="button"
                 class="box"
@@ -238,15 +247,18 @@
             :title="i.title"
             v-show="!isInterval && rightShown"
           >
-          <input type="text" id="number" ref="number" v-model="teethIntervalNum" v-show="isInterval && rightShown" />
+          <p v-show="isInterval && rightShown" style="color: red;height:20px">{{ warnText }}</p>
+          <input type="text" id="number" ref="number" v-model="teethIntervalNum" v-show="isInterval && rightShown" autocomplete="off" />
+          <p v-show="isInterval && rightShown">注：间隙最多2位小数,间隙单位：mm</p>
+
         </div>
       </div>
-      <div
+      <!-- <div
         id="close"
         @click="showContainer = !showContainer"
       >
         x
-      </div>
+      </div> -->
       <slot />
     </div>
   </div>
@@ -257,6 +269,8 @@ export default {
   name: 'ToothSelector',
   data () {
     return {
+      warnText: '',
+      topMaskFlag: false,
       isInterval: false,
       rightShown: false,
       teethInfo: [
@@ -352,12 +366,15 @@ export default {
       dString: '',
       eString: '',
       fString: '',
-      showContainer: false,
       once: true,
       teethIntervalNum: null,
     }
   },
   props: {
+    showContainer: {
+      type: Boolean,
+      default: true
+    },
     historyProp: {
       type: Object,
       default: () => {}
@@ -365,6 +382,14 @@ export default {
     value: {
       type: Object,
       default: () => {}
+    },
+    maskFlag: {
+      type: Boolean,
+      default: false
+    },
+    maskArr: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {
@@ -400,6 +425,8 @@ export default {
     }
   },
   methods: {
+    tm(e) {
+    },
     choose (e, id) {
       const flag = this.teethInfo[id - 1]['chosen'] = !this.teethInfo[id - 1]['chosen']
       // console.log(this.$refs, this.$refs.number)
@@ -426,7 +453,6 @@ export default {
         this.isInterval = false
       }
       this.displayCordinate(name, flag)
-      console.warn(flag)
       
     },
     chooseLocation (e, id) {
@@ -632,17 +658,32 @@ export default {
         const output = this.strMapToOutput(history)
         this.$emit('input', output)
       }
+    },
+    maskTooth(arr) {
+      this.teethInfo.forEach(i => {
+        if(arr.includes(i.location + i.name)) {
+          i.masked = true
+        } 
+      })
     }
   },
   watch: {
     teethIntervalNum(val) {
+      // 控制一下必须最多两位小数 而且必须是数字
+      if(JSON.stringify(Number.parseFloat(val)) !== val) {
+        this.warnText = '请输入正确的数字'
+        return
+      } else {
+        this.warnText = ''
+      }
       if(val !== null) {
+        val = Number.parseFloat(val).toFixed(2)
         const lastKey = [...this.history.keys()].pop()
         if(lastKey && lastKey.length > 3) {
           this.history.set(lastKey, val)
         }
-        this.changeHistoryChangeFlag()
         this.toFather(this.history)
+        this.changeHistoryChangeFlag()
       }
     },
     historyChangeFlag: {
@@ -687,29 +728,30 @@ export default {
           }
         })
         this.toFather(this.history)
-        // console.log(this.history)
+    
       },
       immediate: true
     }
   },
   beforeMount () {
-    // 在组件外点击会使之消失
-    this._close = e => { // 如果点击发生在当前组件内部，则不处理
-      if (this.$el.contains(e.target)) {
+    // // 在组件外点击会使之消失
+    // this._close = e => { // 如果点击发生在当前组件内部，则不处理
+    //   if (this.$el.contains(e.target)) {
 
-      } else {
-        this.showContainer = false
-      }
-    }
-    document.body.addEventListener('click', this._close)
+    //   } else {
+    //     this.showContainer = false
+    //   }
+    // }
+    // document.body.addEventListener('click', this._close)
   },
   beforeDestroy () {
-    document.body.removeEventListener('click', this._close)
+    // document.body.removeEventListener('click', this._close)
   },
   mounted () {
+
+
     // 从后台获取数值
     // 将对象转化为Map
-
     let historyPropBackup
     if (this.historyProp && typeof this.historyProp === 'object') {
       historyPropBackup = this.inputArraytoString(this.historyProp)
@@ -736,6 +778,11 @@ export default {
           this.teethInfo[i]['chosen'] = true
         }
       }
+    }
+    // 选择性mask
+    if(this.maskArr && this.maskArr.length > 0) {
+      this.maskTooth(this.maskArr)
+      this.topMaskFlag = true
     }
   }
 }
@@ -862,10 +909,10 @@ export default {
     padding: 20px;
     border: 1px solid #D8DCE6;
     border-radius: 5px;
-    box-shadow: 0px 2px 5px #888888;
-    position: absolute;
-    left: 4px;
-    top: 130px;
+    // box-shadow: 0px 2px 5px #888888;
+    position: relative;
+    // left: 4px;
+    // top: 130px;
     z-index: 5;
       & > .header {
         text-align: left;
@@ -1024,6 +1071,9 @@ export default {
         }
         & > .right-body {
           text-align: center;
+          & > p {
+            font-size: 12px;
+          }
           & > input {
             box-sizing: border-box;
             border: 1px solid #D8DCE6;
@@ -1043,20 +1093,20 @@ export default {
           }
         }
       }
-    &:before {
-      content: '';
-      width: 10px;
-      height: 10px;
-      position: absolute;
-      top: -6px;
-      left: 110px;
-      transform: rotateZ(45deg);
-      z-index: 22;
-      background-color: #fff;
-      border-top : 1px solid #D8DCE6;
-      border-left: 1px solid #D8DCE6;
-      box-shadow: -1px -1px 1px -1px  #888888;
-    }
+    // &:before {
+    //   content: '';
+    //   width: 10px;
+    //   height: 10px;
+    //   position: absolute;
+    //   top: -6px;
+    //   left: 110px;
+    //   transform: rotateZ(45deg);
+    //   z-index: 22;
+    //   background-color: #fff;
+    //   border-top : 1px solid #D8DCE6;
+    //   border-left: 1px solid #D8DCE6;
+    //   box-shadow: -1px -1px 1px -1px  #888888;
+    // }
   }
 
   .btn {
@@ -1116,8 +1166,37 @@ export default {
   }
 
   #number {
-    margin-top: 30px;
+    // margin-top: 30px;
     width: 80px;
   }
 
+
+  .mask {
+    background-color: rgba(100, 100, 100, 0.2);
+    width: 648px;
+    height: 91px;
+    position: absolute;
+    cursor: not-allowed;
+    z-index: 9999;
+  }
+
+  .greyBtn {
+    background-color: rgba(100, 100, 100, 0.2) !important;
+    opacity: 0.8;
+    cursor: not-allowed !important;
+  }
+
+  .toothMask {
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgd2lkdGg9IjI4cHgiIGhlaWdodD0iMjdweCIgdmlld0JveD0iMCAwIDI4IDI3IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPg0KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggNTEuMyAoNTc1NDQpIC0gaHR0cDovL3d3dy5ib2hlbWlhbmNvZGluZy5jb20vc2tldGNoIC0tPg0KICAgIDx0aXRsZT5Hcm91cCA1PC90aXRsZT4NCiAgICA8ZGVzYz5DcmVhdGVkIHdpdGggU2tldGNoLjwvZGVzYz4NCiAgICA8ZGVmcz48L2RlZnM+DQogICAgPGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+DQogICAgICAgIDxnIGlkPSLku7vliqEt5ZKo6K+i5Lu75YqhLS3nlLPor7dY5YWJ5qOA5p+lIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzUxLjAwMDAwMCwgLTU5Ni4wMDAwMDApIiBmaWxsPSIjQ0NDQ0NDIj4NCiAgICAgICAgICAgIDxnIGlkPSJHcm91cC00MiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTIuMDAwMDAwLCA0ODcuMDAwMDAwKSI+DQogICAgICAgICAgICAgICAgPGcgaWQ9Ikdyb3VwLTM4IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxOS4wMDAwMDAsIDY4LjAwMDAwMCkiPg0KICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iR3JvdXAtMzQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMDAwMDAwLCA0MS4wMDAwMDApIj4NCiAgICAgICAgICAgICAgICAgICAgICAgIDxnIGlkPSJHcm91cC0zNC1Db3B5LTciIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI4MC4wMDAwMDAsIDAuMDAwMDAwKSI+DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgPGcgaWQ9Ikdyb3VwLTUiPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iQ29tYmluZWQtU2hhcGUiPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHBhdGggZD0iTTI2LjM4NjAxNzksMTMuMDg4NjM1NiBDMjYuMDk4NTM4LDE0Ljg5MzQ1NDQgMjUuNTQ4OTY3LDE2LjczNjY2MjYgMjQuNTE3MzI1OSwxOC4zNzQxODA3IEMyMi42MDExODc5LDIyLjc5ODI0MjEgMTkuOTIyMDM2OCwyNi45OTIzODg4IDE3Ljk4MzEzNDEsMjYuOTkyMzg4OCBDMTcuNzAzNzkwNywyNi45OTIzODg4IDE3LjQ2MDA5MzcsMjYuOTUzNzcwMiAxNy4yNDczMzE5LDI2Ljg4MjE5ODQgQzE2LjkwMjY2MTksMjYuOTMzMzA5MyAxNi42NTA1NzI5LDI2Ljg1NzUxNDUgMTYuNjAxODM5MSwyNi40ODY5OTk5IEMxNS44MjY5MTA0LDI1LjcyMDY4MDYgMTUuNzc1MzUyMiwyNC4yMDYyNzczIDE1LjcyMzc3MDMsMjIuODEzNjk5OCBDMTUuNjM1MTc5MSwyMC41NTU1OTY3IDE1LjQ2NTk4NDgsMTkuMDAzNTM4NSAxNC4wMDMwMTg3LDE4Ljc0NTYwNTUgTDEzLjA3MTE5ODksMTguNzQ1NjA1NSBDMTIuOTg1MTg2MywxOC43NjA3NzA3IDEyLjkwMzY0NiwxOC43ODA0MDk1IDEyLjgyNjMzMTUsMTguODA0NDAyNCBMMTEuODg3MjgyMSwxOS41ODYwMDQgQzExLjQ4OTk0MDUsMjAuMzAzODgxNSAxMS40MDUwNDAyLDIxLjQyNTM0MDcgMTEuMzUwNjI0NCwyMi44MTM2OTk4IEMxMS4yNzc1OTYzLDI0Ljc4MTQyNTcgMTEuMjA0NzU4LDI2Ljk5MjM4ODggOS4wOTExMTgyOCwyNi45OTIzODg4IEM2LjM3MDA0OTc0LDI2Ljk5MjM4ODggMi4xOTExNzEsMTguNzMyMDk3IDAuNjg0OTYwMTA1LDEzLjE2ODM4ODggQy0xLjExMjg0MTMsNi40ODcxNDYyMiAwLjczMzUwMzE2MywxLjU1NTMwNDM5IDUuNDk1MzczMTEsMC4yNjc2NTU4ODggQzcuOTI0ODUxMTQsLTAuMzg4MzYzNDQ1IDEwLjIwODY1MjUsMC4xNzA1Njk3NzIgMTIuMTI4MDI1MSwxLjg3MTE5MDE2IEMxMi45Mjk3MjExLDIuNTc1NzUyNTUgMTQuMTIwMjM2LDIuNTc1NzUyNTUgMTQuOTIxOTMyLDEuODcxMTkwMTYgQzE2LjgxNzAwOTMsMC4xNzA1Njk3NzIgMTkuMTI1MTA2LC0wLjM4ODM2MzQ0NSAyMS41NTQ1ODQsMC4yNjc2NTU4ODggQzI2LjI5NzQ4NzEsMS41MjYwMjQzOSAyOC4xMjM5NDE5LDYuNDQ3NzI0MDEgMjYuMzg2MDE3OSwxMy4wODg2MzU2IFoiPjwvcGF0aD4NCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9nPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZz4NCiAgICAgICAgICAgICAgICAgICAgICAgIDwvZz4NCiAgICAgICAgICAgICAgICAgICAgPC9nPg0KICAgICAgICAgICAgICAgIDwvZz4NCiAgICAgICAgICAgIDwvZz4NCiAgICAgICAgPC9nPg0KICAgIDwvZz4NCjwvc3ZnPg==');
+    background-repeat: no-repeat;
+    background-position: 3.8px 6px;
+    opacity: 0.8;
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    z-index: 9998;
+    margin-right: 5px;
+    cursor: not-allowed;
+
+  }
 </style>
