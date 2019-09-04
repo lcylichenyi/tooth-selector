@@ -1,9 +1,8 @@
 <template>
   <div style="position: relative">
-    <!-- <div class="btn-container">
+    <div class="btn-container" v-if="showContainer">
       <p v-html="eString" />
       <table
-        @click="showContainer = !showContainer"
         class="btn"
       >
         <tr>
@@ -14,7 +13,7 @@
         </tr>
       </table>
       <p v-html="fString" />
-    </div> -->
+    </div>
     <div
       ref="sel"
       class="container"
@@ -32,6 +31,7 @@
           :class="{'active': allTeeth, 'greyBtn': topMaskFlag}"
           :disabled=topMaskFlag
           @click="allTeethChosen"
+          v-if="!toothOnly"
         >
         <input
           type="button"
@@ -39,6 +39,7 @@
           :class="{'active': topHalfTeeth, 'greyBtn': topMaskFlag}"
           :disabled=topMaskFlag
           @click="topHalfTeethChosen"
+          v-if="!toothOnly"
         >
         <input
           type="button"
@@ -46,6 +47,7 @@
           :class="{'active': bottomHalfTeeth, 'greyBtn': topMaskFlag}"
           :disabled=topMaskFlag
           @click="bottomHalfTeethChosen"
+          v-if="!toothOnly"
         >
       </div>
       <div class="body-left">
@@ -53,6 +55,14 @@
           <div
             class="clearfix"
             id="body-left-1-line-1"
+            v-if="toothOnly"
+            style="height: 35px;"
+          >
+          </div>
+          <div
+            class="clearfix"
+            id="body-left-1-line-1"
+            v-if="!toothOnly"
           >
             <div
               class="fl interval"
@@ -102,6 +112,7 @@
           <div
             class="clearfix"
             id="body-left-1-line-2"
+            
           >
             <div
               class="fl tooth"
@@ -179,6 +190,7 @@
           <div
             class="clearfix"
             id="body-left-2-line-2"
+            v-if="!toothOnly"
           >
             <div
               class="fl interval"
@@ -373,7 +385,7 @@ export default {
   props: {
     showContainer: {
       type: Boolean,
-      default: true
+      default: false
     },
     historyProp: {
       type: Object,
@@ -390,6 +402,14 @@ export default {
     maskArr: {
       type: Array,
       default: () => []
+    },
+    toothOnly: {
+      type: Boolean,
+      default: false
+    },
+    intervalOnly: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -634,7 +654,7 @@ export default {
       let str = ''
       let arr = []
       if (val) {
-        if(Number.parseInt(val)) {
+        if(!Number.isNaN(Number.parseInt(val))) {
           str = val
         } else {
           for (let i = 0; i < val.length; i++) {
@@ -721,10 +741,10 @@ export default {
             this.dString = arr4.join(',').replace(/d/g, '')
           }
           if (key.includes('e')) {
-            this.eString = '<1|1>'
+            this.eString = `<1|1><sup>${this.history.get('e<1|1>')}</sup>`
           }
           if (key.includes('f')) {
-            this.fString = '<1|1>'
+            this.fString = `<1|1>${this.history.get('f<1|1>')}`
           }
         })
         this.toFather(this.history)
@@ -749,6 +769,9 @@ export default {
   },
   mounted () {
 
+    if(this.intervalOnly) {
+      this.maskArr = ['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'd1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8']
+    }
 
     // 从后台获取数值
     // 将对象转化为Map
@@ -1156,7 +1179,7 @@ export default {
   }
 
   .btn-container {
-    cursor: pointer;
+    // cursor: pointer;
     width: 210px;
     > p {
       font-size: 12px;
@@ -1199,4 +1222,5 @@ export default {
     cursor: not-allowed;
 
   }
+ 
 </style>
