@@ -683,11 +683,26 @@ export default {
       this.teethInfo.forEach(i => {
         if(arr.includes(i.location + i.name)) {
           i.masked = true
-        } 
+        } else {
+          i.masked = false
+        }
       })
     }
   },
   watch: {
+    maskArr: {
+      handler(val, old) {
+        if(val && val.length > 0) {
+          this.maskTooth(val)
+          this.topMaskFlag = true
+        } else {
+          this.maskTooth(val)
+          this.topMaskFlag = false
+        }
+        this.changeHistoryChangeFlag()
+      },
+      deep: true
+    },
     teethIntervalNum(val) {
       // 控制一下必须最多两位小数 而且必须是数字
       if(JSON.stringify(Number.parseFloat(val)) !== val) {
